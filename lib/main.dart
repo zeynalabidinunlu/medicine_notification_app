@@ -5,6 +5,8 @@ import 'package:medicine_notification_app/presentation/home/home_view.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  IsarService.openDB;
   runApp(
     MultiProvider(
       providers: [
@@ -49,6 +51,6 @@ class MainApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home:const HomeView());
+        home: const HomeView());
   }
 }

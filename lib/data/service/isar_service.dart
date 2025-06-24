@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 class IsarService {
   late Future<Isar> db;
 
-  Future<Isar> openDB() async {
+  static Future<Isar> openDB() async {
     var dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open([MedicineSchema], directory: dir.path);

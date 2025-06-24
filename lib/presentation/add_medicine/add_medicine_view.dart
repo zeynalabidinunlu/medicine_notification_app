@@ -92,7 +92,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
     final viewModel = Provider.of<AddMedicineViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+       
         title: const Text("İlaç Ekle"),
       ),
       body: SingleChildScrollView(
@@ -249,7 +249,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 // Placeholder yerine hatırlatma zamanları listesi
-                Container(
+                SizedBox(
                   height: 100,
                   child: reminderList.isEmpty
                       ? const Center(child: Text('Henüz zaman eklenmedi'))
@@ -272,25 +272,27 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                           },
                         ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (time != null) {
-                      setState(() {
-                        reminderList.add(DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          time.hour,
-                          time.minute,
-                        ));
-                      });
-                    }
-                  },
-                  child: const Text('Zaman Ekle'),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      TimeOfDay? time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (time != null) {
+                        setState(() {
+                          reminderList.add(DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            time.hour,
+                            time.minute,
+                          ));
+                        });
+                      }
+                    },
+                    child: const Text('Zaman Ekle'),
+                  ),
                 ),
                 const SizedBox(
                   height: 30,
@@ -336,7 +338,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       ),
                     ),
                     child: const Text(
-                      'İlacı Ekle',
+                      'İlacı Kaydet',
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
                   ),
