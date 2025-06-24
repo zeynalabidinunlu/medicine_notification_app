@@ -68,15 +68,21 @@ class _AddMedicineViewState extends State<AddMedicineView> {
 
       try {
         await viewModel.saveMedicine(newMedicine);
-        ScaffoldMessenger.of(context).showSnackBar(
+      if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('İlaç başarıyla eklendi')),
         );
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>const HomeView(),));
+      }
+      
         
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>const HomeView(),));
+  
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
+       if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Hata: $e')),
         );
+       }
       }
     }
   }
