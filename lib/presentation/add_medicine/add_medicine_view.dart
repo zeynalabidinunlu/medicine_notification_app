@@ -281,7 +281,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       });
                     }
                   },
-                  child: const Text('Zaman Ekle'),
+                  child:const Center(child:  Text('Zaman Ekle')),
                 ),
                 const SizedBox(
                   height: 30,

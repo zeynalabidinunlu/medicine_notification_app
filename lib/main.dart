@@ -49,6 +49,11 @@ class MainApp extends StatelessWidget {
               textStyle: const TextStyle(fontSize: 18.0),
             ),
           ),
+          chipTheme:const ChipThemeData(
+            elevation: 20.0,
+            checkmarkColor: Colors.white,
+            selectedColor: Color(0xFF4CAF50)
+          ),
           useMaterial3: true,
         ),
         home: const HomeView());
