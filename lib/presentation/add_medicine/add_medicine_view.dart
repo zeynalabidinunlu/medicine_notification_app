@@ -15,11 +15,12 @@ class AddMedicineView extends StatefulWidget {
 
 class _AddMedicineViewState extends State<AddMedicineView> {
   List<DateTime> reminderList = [];
+  List<UsageTypes> selectedUsageTypes = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController notificationController = TextEditingController();
   TextEditingController pillCountController = TextEditingController();
-  
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color hintTextColor = Colors.grey.shade500;
   final Color textFieldFillColor = Colors.grey.shade200;
@@ -39,16 +40,17 @@ class _AddMedicineViewState extends State<AddMedicineView> {
 
   void _saveMedicine() async {
     if (_formKey.currentState!.validate()) {
-      final viewModel = Provider.of<AddMedicineViewModel>(context, listen: false);
-      
+      final viewModel =
+          Provider.of<AddMedicineViewModel>(context, listen: false);
+
       // Form validation
-      if (viewModel.selectedUsageTypes == null) {
+      if (viewModel.selectedUsageTypes.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Kullanım vakti seçiniz')),
         );
         return;
       }
-      
+
       if (viewModel.selectedHungerSituations == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Açlık durumu seçiniz')),
@@ -60,7 +62,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
       final newMedicine = Medicine()
         ..name = nameController.text.trim()
         ..description = descriptionController.text.trim()
-        ..usageTypes = viewModel.selectedUsageTypes!
+        ..usageTypes = viewModel.selectedUsageTypes
         ..hungerSituation = viewModel.selectedHungerSituations!
         ..notificationText = notificationController.text.trim()
         ..reminderTimes = reminderList
@@ -68,21 +70,22 @@ class _AddMedicineViewState extends State<AddMedicineView> {
 
       try {
         await viewModel.saveMedicine(newMedicine);
-      if (mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('İlaç başarıyla eklendi')),
-        );
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>const HomeView(),));
-      }
-      
-        
-  
+            const SnackBar(content: Text('İlaç başarıyla eklendi')),
+          );
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeView(),
+              ));
+        }
       } catch (e) {
-       if (mounted) {
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Hata: $e')),
-        );
-       }
+            SnackBar(content: Text('Hata: $e')),
+          );
+        }
       }
     }
   }
@@ -92,7 +95,6 @@ class _AddMedicineViewState extends State<AddMedicineView> {
     final viewModel = Provider.of<AddMedicineViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-       
         title: const Text("İlaç Ekle"),
       ),
       body: SingleChildScrollView(
@@ -153,30 +155,19 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                   builder: (context, viewModel, child) {
                     return Wrap(
                       spacing: 10.0,
-                      runSpacing: 10.0,
-                      children: <Widget>[
-                        SelectionChip(
-                            label: "Sabah",
-                            isSelected:
-                                viewModel.selectedUsageTypes == UsageTypes.SABAH,
-                            onTap: () =>
-                                viewModel.setUsageType(UsageTypes.SABAH)),
-                        SelectionChip(
-                            label: "Öğle",
-                            isSelected:
-                                viewModel.selectedUsageTypes == UsageTypes.OGLE,
-                            onTap: () =>
-                                viewModel.setUsageType(UsageTypes.OGLE)),
-                        SelectionChip(
-                            label: "Akşam",
-                            isSelected:
-                                viewModel.selectedUsageTypes == UsageTypes.AKSAM,
-                            onTap: () =>
-                                viewModel.setUsageType(UsageTypes.AKSAM)),
-                      ],
+                      children: UsageTypes.values.map((type) {
+                        final isSelected =
+                            viewModel.selectedUsageTypes.contains(type);
+                        return ChoiceChip(
+                          label: Text(type.name.toUpperCase()),
+                          selected: isSelected,
+                          onSelected: (_) => viewModel.toggleUsageType(type),
+                        );
+                      }).toList(),
                     );
                   },
                 ),
+
                 const SizedBox(
                   height: 30.0,
                 ),
@@ -272,27 +263,25 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                           },
                         ),
                 ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      TimeOfDay? time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      if (time != null) {
-                        setState(() {
-                          reminderList.add(DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            time.hour,
-                            time.minute,
-                          ));
-                        });
-                      }
-                    },
-                    child: const Text('Zaman Ekle'),
-                  ),
+                ElevatedButton(
+                  onPressed: () async {
+                    TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (time != null) {
+                      setState(() {
+                        reminderList.add(DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          time.hour,
+                          time.minute,
+                        ));
+                      });
+                    }
+                  },
+                  child: const Text('Zaman Ekle'),
                 ),
                 const SizedBox(
                   height: 30,
@@ -338,7 +327,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       ),
                     ),
                     child: const Text(
-                      'İlacı Kaydet',
+                      'İlacı Ekle',
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
                   ),

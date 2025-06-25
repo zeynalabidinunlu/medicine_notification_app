@@ -51,7 +51,7 @@ const MedicineSchema = CollectionSchema(
     r'usageTypes': PropertySchema(
       id: 6,
       name: r'usageTypes',
-      type: IsarType.string,
+      type: IsarType.stringList,
       enumMap: _MedicineusageTypesEnumValueMap,
     )
   },
@@ -106,9 +106,15 @@ int _medicineEstimateSize(
     }
   }
   {
-    final value = object.usageTypes;
-    if (value != null) {
-      bytesCount += 3 + value.name.length * 3;
+    final list = object.usageTypes;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount += value.name.length * 3;
+        }
+      }
     }
   }
   return bytesCount;
@@ -126,7 +132,8 @@ void _medicineSerialize(
   writer.writeString(offsets[3], object.notificationText);
   writer.writeLong(offsets[4], object.numberOfPills);
   writer.writeDateTimeList(offsets[5], object.reminderTimes);
-  writer.writeString(offsets[6], object.usageTypes?.name);
+  writer.writeStringList(
+      offsets[6], object.usageTypes?.map((e) => e.name).toList());
 }
 
 Medicine _medicineDeserialize(
@@ -144,8 +151,10 @@ Medicine _medicineDeserialize(
   object.notificationText = reader.readStringOrNull(offsets[3]);
   object.numberOfPills = reader.readLongOrNull(offsets[4]);
   object.reminderTimes = reader.readDateTimeList(offsets[5]);
-  object.usageTypes =
-      _MedicineusageTypesValueEnumMap[reader.readStringOrNull(offsets[6])];
+  object.usageTypes = reader
+      .readStringList(offsets[6])
+      ?.map((e) => _MedicineusageTypesValueEnumMap[e] ?? UsageTypes.SABAH)
+      .toList();
   return object;
 }
 
@@ -170,8 +179,10 @@ P _medicineDeserializeProp<P>(
     case 5:
       return (reader.readDateTimeList(offset)) as P;
     case 6:
-      return (_MedicineusageTypesValueEnumMap[reader.readStringOrNull(offset)])
-          as P;
+      return (reader
+          .readStringList(offset)
+          ?.map((e) => _MedicineusageTypesValueEnumMap[e] ?? UsageTypes.SABAH)
+          .toList()) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1208,8 +1219,9 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesEqualTo(
-    UsageTypes? value, {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementEqualTo(
+    UsageTypes value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1221,8 +1233,9 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesGreaterThan(
-    UsageTypes? value, {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementGreaterThan(
+    UsageTypes value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1236,8 +1249,9 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesLessThan(
-    UsageTypes? value, {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementLessThan(
+    UsageTypes value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1251,9 +1265,10 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesBetween(
-    UsageTypes? lower,
-    UsageTypes? upper, {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementBetween(
+    UsageTypes lower,
+    UsageTypes upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1270,7 +1285,8 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesStartsWith(
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1283,7 +1299,8 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesEndsWith(
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1296,9 +1313,8 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'usageTypes',
@@ -1308,9 +1324,8 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'usageTypes',
@@ -1320,7 +1335,8 @@ extension MedicineQueryFilter
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesIsEmpty() {
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'usageTypes',
@@ -1330,12 +1346,100 @@ extension MedicineQueryFilter
   }
 
   QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
-      usageTypesIsNotEmpty() {
+      usageTypesElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'usageTypes',
         value: '',
       ));
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition> usageTypesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Medicine, Medicine, QAfterFilterCondition>
+      usageTypesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'usageTypes',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 }
@@ -1404,18 +1508,6 @@ extension MedicineQuerySortBy on QueryBuilder<Medicine, Medicine, QSortBy> {
   QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByNumberOfPillsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'numberOfPills', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByUsageTypes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'usageTypes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Medicine, Medicine, QAfterSortBy> sortByUsageTypesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'usageTypes', Sort.desc);
     });
   }
 }
@@ -1493,18 +1585,6 @@ extension MedicineQuerySortThenBy
       return query.addSortBy(r'numberOfPills', Sort.desc);
     });
   }
-
-  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByUsageTypes() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'usageTypes', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Medicine, Medicine, QAfterSortBy> thenByUsageTypesDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'usageTypes', Sort.desc);
-    });
-  }
 }
 
 extension MedicineQueryWhereDistinct
@@ -1551,10 +1631,9 @@ extension MedicineQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Medicine, Medicine, QDistinct> distinctByUsageTypes(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Medicine, Medicine, QDistinct> distinctByUsageTypes() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'usageTypes', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'usageTypes');
     });
   }
 }
@@ -1605,7 +1684,8 @@ extension MedicineQueryProperty
     });
   }
 
-  QueryBuilder<Medicine, UsageTypes?, QQueryOperations> usageTypesProperty() {
+  QueryBuilder<Medicine, List<UsageTypes>?, QQueryOperations>
+      usageTypesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'usageTypes');
     });

@@ -15,7 +15,7 @@ class Medicine {
   String? description;
 
   @Enumerated(EnumType.name)
-  UsageTypes? usageTypes;
+  List<UsageTypes>? usageTypes;
 
   @Enumerated(EnumType.name)
   HungerSituation? hungerSituation;

@@ -184,7 +184,7 @@ class _HomePageContentState extends State<HomePageContent> {
                           style: const TextStyle(fontSize: 14),
                         ),
                         Text(
-                          'Kullanım Şekli: ${medicine.usageTypes?.name ?? 'Belirtilmemiş'}',
+                          'Kullanım Şekli: ${medicine.usageTypes   ?? 'Belirtilmemiş'}',
                           style: const TextStyle(fontSize: 14),
                         ),
                         Text(

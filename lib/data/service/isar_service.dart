@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -21,6 +22,18 @@ class IsarService {
     final isar = await db;
     isar.writeTxnSync(() => isar.medicines.putSync(newMedicine));
   }
+
+Future<void> saveUsageTypesToMedicine(Id medicineId, List<UsageTypes> usageTypes) async {
+  final isar = await db;
+  await isar.writeTxn(() async {
+    final medicine = await isar.medicines.get(medicineId);
+    if (medicine != null) {
+      medicine.usageTypes = usageTypes;
+      await isar.medicines.put(medicine);
+    }
+  });
+}
+
 
   Future<List<Medicine>> getAllMedicine() async {
     final isar = await db;
