@@ -40,10 +40,10 @@ Future<void> saveUsageTypesToMedicine(Id medicineId, List<UsageTypes> usageTypes
     return await isar.medicines.where().findAll();
   }
 
-  Future<void> deleteMedicine(int medicineId) async {
-    final isar = await db;
-    isar.writeTxn(() => isar.medicines.delete(medicineId));
-  }
+ Future<void> deleteMedicine(int medicineId) async { 
+  final isar = await db; 
+  await isar.writeTxn(() async => await isar.medicines.delete(medicineId)); 
+}
 
   Future<void> updateMedicine(Medicine updateMedicine) async {
     final isar = await db;

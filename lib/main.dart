@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/service/isar_service.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
-import 'package:medicine_notification_app/presentation/home/home_view.dart';
+import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
+import 'package:medicine_notification_app/presentation/home/home_view_v2.dart';
+import 'package:medicine_notification_app/repository/medicine_repository.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,6 +17,13 @@ void main() {
           create: (context) =>
               AddMedicineViewModel(context.read<IsarService>()),
         ),
+        Provider<MedicineRepository>(
+          create: (_) => IsarMedicineRepository(),
+        ),
+        ChangeNotifierProvider<HomeViewModel>(
+          create: (context) =>
+              HomeViewModel(context.read<MedicineRepository>()),
+        )
       ],
       child: const MainApp(),
     ),
@@ -49,10 +58,16 @@ class MainApp extends StatelessWidget {
               textStyle: const TextStyle(fontSize: 18.0),
             ),
           ),
-          chipTheme:const ChipThemeData(
-            elevation: 20.0,
-            checkmarkColor: Colors.white,
-            selectedColor: Color(0xFF4CAF50)
+          chipTheme: const ChipThemeData(
+              elevation: 20.0,
+              checkmarkColor: Colors.black,
+              selectedColor: Color(0xFFE8F5E0)),
+          cardTheme: CardThemeData(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            color: Colors.white,
           ),
           useMaterial3: true,
         ),
