@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/data/service/isar_service.dart';
+import 'package:medicine_notification_app/service/isar_service.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
-import 'package:medicine_notification_app/presentation/home/home_view_v2.dart';
+import 'package:medicine_notification_app/presentation/home/home_view.dart';
 import 'package:medicine_notification_app/repository/medicine_repository.dart';
+import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:provider/provider.dart';
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  IsarService.openDB;
+
+  await FlutterLocalNotificationService().initNotification(); // düzeltildi
+
+   IsarService.openDB; // Bunu da await yapmalısın eğer Future dönüyorsa
+
   runApp(
     MultiProvider(
       providers: [
@@ -29,6 +33,7 @@ void main() {
     ),
   );
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

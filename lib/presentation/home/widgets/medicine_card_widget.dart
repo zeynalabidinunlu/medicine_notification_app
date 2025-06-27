@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/utils/delete_confirm_dialog.dart';
+import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 
 import 'package:provider/provider.dart';
 
@@ -97,6 +98,15 @@ class MedicineCardWidget extends StatelessWidget {
             ),
           ),
         ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     FlutterLocalNotificationService().showNotification(
+        //         title: medicine.name, body: medicine.description);
+        //     debugPrint("------------------------------------------" +
+        //         medicine.id.toString());
+        //   },
+        //   child: const Text("Test Bildirimi"),
+        // ),
       ],
     );
   }
@@ -111,11 +121,13 @@ class MedicineCardWidget extends StatelessWidget {
         runSpacing: 4.0,
         children: medicine.usageTypes!
             .map((usage) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFE3F2FD),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFF1976D2), width: 0.5),
+                    border:
+                        Border.all(color: const Color(0xFF1976D2), width: 0.5),
                   ),
                   child: Text(
                     usage.name,
@@ -154,7 +166,8 @@ class MedicineCardWidget extends StatelessWidget {
   }
 
   Widget _buildReminderTimes() {
-    if (medicine.reminderTimes?.isEmpty != false) return const SizedBox.shrink();
+    if (medicine.reminderTimes?.isEmpty != false)
+      return const SizedBox.shrink();
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -185,7 +198,8 @@ class MedicineCardWidget extends StatelessWidget {
             runSpacing: 4.0,
             children: medicine.reminderTimes!
                 .map((time) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(6),
@@ -208,7 +222,8 @@ class MedicineCardWidget extends StatelessWidget {
   }
 
   Widget _buildNotificationText() {
-    if (medicine.notificationText?.isEmpty != false) return const SizedBox.shrink();
+    if (medicine.notificationText?.isEmpty != false)
+      return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.only(top: 12.0),
@@ -221,7 +236,8 @@ class MedicineCardWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.notifications_active, size: 16, color: Color(0xFFEF6C00)),
+            const Icon(Icons.notifications_active,
+                size: 16, color: Color(0xFFEF6C00)),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -251,8 +267,10 @@ class MedicineCardWidget extends StatelessWidget {
 
   Future<void> _deleteMedicine(BuildContext context) async {
     try {
-      await context.read<HomeViewModel>().deleteMedicine(medicine.id?.toInt() ?? 0);
-      
+      await context
+          .read<HomeViewModel>()
+          .deleteMedicine(medicine.id?.toInt() ?? 0);
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

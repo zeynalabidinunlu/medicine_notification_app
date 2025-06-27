@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
-import 'package:medicine_notification_app/presentation/home/home_view_v2.dart';
+import 'package:medicine_notification_app/presentation/home/home_view.dart';
+import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:medicine_notification_app/utils/widgets/selection_chip.dart';
 import 'package:provider/provider.dart';
 
@@ -70,6 +71,16 @@ class _AddMedicineViewState extends State<AddMedicineView> {
 
       try {
         await viewModel.saveMedicine(newMedicine);
+        for (int i = 0; i < reminderList.length; i++) {
+          final reminder = reminderList[i];
+          await FlutterLocalNotificationService().scheduledNotification(
+            id: i + 1,
+            title: newMedicine.name ?? 'İlaç',
+            body: newMedicine.notificationText ?? 'İlaç alma zamanı',
+            hour: reminder.hour,
+            minute: reminder.minute,
+          );
+        }
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('İlaç başarıyla eklendi')),
@@ -281,7 +292,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       });
                     }
                   },
-                  child:const Center(child:  Text('Zaman Ekle')),
+                  child: const Center(child: Text('Zaman Ekle')),
                 ),
                 const SizedBox(
                   height: 30,

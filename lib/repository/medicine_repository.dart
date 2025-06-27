@@ -1,5 +1,5 @@
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
-import 'package:medicine_notification_app/data/service/isar_service.dart';
+import 'package:medicine_notification_app/service/isar_service.dart';
 import 'package:isar/isar.dart';
 
 abstract class MedicineRepository {
