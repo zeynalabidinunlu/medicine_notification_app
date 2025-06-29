@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
+import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:medicine_notification_app/utils/widgets/selection_chip.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,21 @@ class _UpdateScreenViewState extends State<UpdateScreenView> {
 
       try {
         await viewModel.updateMedicine(
-            widget.medicine.id?.toInt() ?? 0, updatedMedicine);
+          widget.medicine.id?.toInt() ?? 0,
+          updatedMedicine,
+        );
+
+        // Bildirimleri güncelle
+        for (int i = 0; i < updatedMedicine.reminderTimes!.length; i++) {
+          final reminder = updatedMedicine.reminderTimes![i];
+          await FlutterLocalNotificationService().scheduledNotification(
+            id: i + 1,
+            title: updatedMedicine.name ?? "",
+            body: updatedMedicine.notificationText ?? "",
+            hour: reminder.hour,
+            minute: reminder.minute,
+          );
+        }
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -317,7 +332,7 @@ class _UpdateScreenViewState extends State<UpdateScreenView> {
                   focusedBorder: border,
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20.0, vertical: 15.0),
-                  ),
+                ),
               ),
               const SizedBox(height: 40.0),
               SizedBox(

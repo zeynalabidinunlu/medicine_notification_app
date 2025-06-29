@@ -79,6 +79,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
             body: newMedicine.notificationText ?? 'İlaç alma zamanı',
             hour: reminder.hour,
             minute: reminder.minute,
+         
           );
         }
         if (mounted) {

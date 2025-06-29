@@ -103,15 +103,15 @@ class MedicineCardWidget extends StatelessWidget {
             ),
           ),
         ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     FlutterLocalNotificationService().showNotification(
-        //         title: medicine.name, body: medicine.description);
-        //     debugPrint("------------------------------------------" +
-        //         medicine.id.toString());
-        //   },
-        //   child: const Text("Test Bildirimi"),
-        // ),
+        ElevatedButton(
+          onPressed: () {
+            FlutterLocalNotificationService().showNotification(
+                title: medicine.name, body: medicine.notificationText,);
+            debugPrint("------------------------------------------" +
+                medicine.id.toString());
+          },
+          child: const Text("Test Bildirimi"),
+        ),
       ],
     );
   }
