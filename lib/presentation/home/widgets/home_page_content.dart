@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/widgets/empty_medicine_widget.dart';
 import 'package:medicine_notification_app/presentation/home/widgets/medicine_list_widget.dart';
+import 'package:medicine_notification_app/utils/widgets/medicine_card_shimmer.dart';
 
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class _HomePageContentState extends State<HomePageContent> {
       body: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: MedicineCardShimmer());
           }
 
           if (viewModel.error != null) {

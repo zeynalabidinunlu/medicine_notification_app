@@ -38,7 +38,7 @@ class FlutterLocalNotificationService {
     await _ttsService.initialize();
 
     const initSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@drawable/ic_notification');
     const initSettingsIOS = DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,

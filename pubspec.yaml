@@ -22,13 +22,33 @@ dependencies:
   provider: ^6.1.5
   flutter_timezone: ^4.1.1
   flutter_tts: ^4.2.3
+  shimmer: ^3.0.0
+  android_notification_icons: ^0.0.1
 
+assets:
+  - assets/notification/noti.png
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/notification/noti.png"
+  android_12: true
+
+
+  
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   isar_generator: ^3.1.0+1
   build_runner: ^2.4.13
+  android_notification_icons:
+
+android_notification_icons:
+  image_path: assets/notification/noti.png
+
+
 
 flutter:
   uses-material-design: true
