@@ -56,20 +56,20 @@ class AddMedicineViewModel extends ChangeNotifier {
     return listOffAllMedicine;
   }
 
-  Future<void> updateMedicine(Medicine updateMedicine) async {
-    await _isarService.updateMedicine(updateMedicine);
+  Future<void> updateMedicine(int id, Medicine updateMedicine) async {
+    await _isarService.updateMedicine(id, updateMedicine);
     notifyListeners();
   }
 
-Future<void> deleteMedicine(int medicineId) async { 
-  try {
-    await _isarService.deleteMedicine(medicineId); 
-    notifyListeners(); 
-  } catch (e) {
-    // Hata durumunda kullanıcıya bilgi ver
-    // ignore: avoid_print
-    print('İlaç silme hatası: $e');
-    rethrow;
+  Future<void> deleteMedicine(int medicineId) async {
+    try {
+      await _isarService.deleteMedicine(medicineId);
+      notifyListeners();
+    } catch (e) {
+      // Hata durumunda kullanıcıya bilgi ver
+      // ignore: avoid_print
+      print('İlaç silme hatası: $e');
+      rethrow;
+    }
   }
-}
 }

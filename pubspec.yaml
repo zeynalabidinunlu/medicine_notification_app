@@ -21,6 +21,7 @@ dependencies:
   #state management
   provider: ^6.1.5
   flutter_timezone: ^4.1.1
+  flutter_tts: ^4.2.3
 
 dev_dependencies:
   flutter_test:

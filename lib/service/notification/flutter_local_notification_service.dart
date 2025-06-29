@@ -1,10 +1,12 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:medicine_notification_app/service/tts/tts_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
 
 class FlutterLocalNotificationService {
   final notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final TTSService _ttsService = TTSService();
 
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
@@ -15,6 +17,8 @@ class FlutterLocalNotificationService {
     tz.initializeTimeZones();
     final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    await _ttsService.initialize();
 
     const initSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -62,5 +66,8 @@ class FlutterLocalNotificationService {
 
   Future<void> cancellAllNotifications() async {
     await notificationsPlugin.cancelAll();
+  }
+  Future<void> cancelNotificationById(int id) async {
+    await notificationsPlugin.cancel(id);
   }
 }

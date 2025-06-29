@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
+  final int medicineId;
   final String medicineName;
   final VoidCallback onConfirm;
 
@@ -8,6 +9,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
     super.key,
     required this.medicineName,
     required this.onConfirm,
+    required this.medicineId
   });
 
   @override

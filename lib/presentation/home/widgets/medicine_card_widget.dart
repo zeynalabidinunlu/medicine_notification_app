@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/models/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/utils/delete_confirm_dialog.dart';
+import 'package:medicine_notification_app/presentation/update_screen/update_screen_view.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
-
 import 'package:provider/provider.dart';
 
 class MedicineCardWidget extends StatelessWidget {
@@ -21,7 +21,12 @@ class MedicineCardWidget extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () {
-            // İlaç detaylarına gitme işlemi
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UpdateScreenView(
+                      id: medicine.id?.toInt() ?? 0, medicine: medicine),
+                ));
           },
           borderRadius: BorderRadius.circular(16.0),
           child: Padding(
@@ -259,6 +264,7 @@ class MedicineCardWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => DeleteConfirmationDialog(
+        medicineId: medicine.id?.toInt() ?? 0,
         medicineName: medicine.name ?? 'Bu ilaç',
         onConfirm: () => _deleteMedicine(context),
       ),
@@ -266,11 +272,13 @@ class MedicineCardWidget extends StatelessWidget {
   }
 
   Future<void> _deleteMedicine(BuildContext context) async {
+    final flutterLocalNotificationService = FlutterLocalNotificationService();
     try {
       await context
           .read<HomeViewModel>()
           .deleteMedicine(medicine.id?.toInt() ?? 0);
-
+      await flutterLocalNotificationService
+          .cancelNotificationById(medicine.id!.toInt());
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

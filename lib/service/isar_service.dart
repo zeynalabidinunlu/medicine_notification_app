@@ -23,32 +23,48 @@ class IsarService {
     isar.writeTxnSync(() => isar.medicines.putSync(newMedicine));
   }
 
-Future<void> saveUsageTypesToMedicine(Id medicineId, List<UsageTypes> usageTypes) async {
-  final isar = await db;
-  await isar.writeTxn(() async {
-    final medicine = await isar.medicines.get(medicineId);
-    if (medicine != null) {
-      medicine.usageTypes = usageTypes;
-      await isar.medicines.put(medicine);
-    }
-  });
-}
-
+  Future<void> saveUsageTypesToMedicine(
+      Id medicineId, List<UsageTypes> usageTypes) async {
+    final isar = await db;
+    await isar.writeTxn(() async {
+      final medicine = await isar.medicines.get(medicineId);
+      if (medicine != null) {
+        medicine.usageTypes = usageTypes;
+        await isar.medicines.put(medicine);
+      }
+    });
+  }
 
   Future<List<Medicine>> getAllMedicine() async {
     final isar = await db;
     return await isar.medicines.where().findAll();
   }
 
- Future<void> deleteMedicine(int medicineId) async { 
-  final isar = await db; 
-  await isar.writeTxn(() async => await isar.medicines.delete(medicineId)); 
-}
+  Future<void> deleteMedicine(int medicineId) async {
+    final isar = await db;
+    await isar.writeTxn(() async => await isar.medicines.delete(medicineId));
+  }
 
-  Future<void> updateMedicine(Medicine updateMedicine) async {
+  Future<void> updateMedicine(int medicineId, Medicine updatedMedicine) async {
     final isar = await db;
     await isar.writeTxn(() async {
-      await isar.medicines.put(updateMedicine);
+      final existingMedicine = await isar.medicines.get(medicineId);
+
+      if (existingMedicine != null) {
+        // Alanları güncelle
+        existingMedicine.name = updatedMedicine.name;
+        existingMedicine.description = updatedMedicine.description;
+        existingMedicine.usageTypes = updatedMedicine.usageTypes;
+        existingMedicine.reminderTimes = updatedMedicine.reminderTimes;
+        existingMedicine.notificationText = updatedMedicine.notificationText;
+        existingMedicine.hungerSituation = updatedMedicine.hungerSituation;
+        existingMedicine.numberOfPills = updatedMedicine.numberOfPills;
+
+        await isar.medicines.put(existingMedicine);
+      } else {
+        // Hata yönetimi: Kayıt bulunamadı
+        throw Exception('Kayıt Bulunamadi id: $medicineId ');
+      }
     });
   }
 }
