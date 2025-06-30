@@ -28,6 +28,9 @@ dependencies:
 assets:
   - assets/notification/noti.png
 dev_dependencies:
+  build_runner: ^2.4.13
+  isar_generator: ^3.1.0+1
+
   flutter_launcher_icons: ^0.14.4
 
 flutter_icons:
@@ -41,8 +44,7 @@ flutter_icons:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-  isar_generator: ^3.1.0+1
-  build_runner: ^2.4.13
+  
   android_notification_icons:
 
 android_notification_icons:

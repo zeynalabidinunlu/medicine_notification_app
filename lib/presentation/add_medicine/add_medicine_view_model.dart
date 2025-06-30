@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/service/isar_service.dart';
 
 class AddMedicineViewModel extends ChangeNotifier {

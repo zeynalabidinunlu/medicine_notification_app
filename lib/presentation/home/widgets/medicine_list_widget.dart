@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/home/widgets/medicine_card_widget.dart';
 import 'package:medicine_notification_app/presentation/update_screen/update_screen_view.dart';
 

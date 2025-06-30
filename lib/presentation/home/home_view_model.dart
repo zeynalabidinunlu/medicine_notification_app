@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/repository/medicine_repository.dart';
 
 class HomeViewModel extends ChangeNotifier {

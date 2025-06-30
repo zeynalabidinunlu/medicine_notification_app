@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 class IsarService {

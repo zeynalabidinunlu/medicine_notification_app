@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:medicine_notification_app/utils/widgets/selection_chip.dart';

@@ -1,4 +1,4 @@
-import 'package:medicine_notification_app/data/models/medicine_model.dart';
+import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/service/isar_service.dart';
 import 'package:isar/isar.dart';
 
