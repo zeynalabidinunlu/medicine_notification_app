@@ -50,7 +50,15 @@ const AppointmentSchema = CollectionSchema(
   deserializeProp: _appointmentDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {},
+  links: {
+    r'doctor': LinkSchema(
+      id: -915233614246172047,
+      name: r'doctor',
+      target: r'Doctor',
+      single: true,
+      linkName: r'appointments',
+    )
+  },
   embeddedSchemas: {},
   getId: _appointmentGetId,
   getLinks: _appointmentGetLinks,
@@ -158,12 +166,13 @@ Id _appointmentGetId(Appointment object) {
 }
 
 List<IsarLinkBase<dynamic>> _appointmentGetLinks(Appointment object) {
-  return [];
+  return [object.doctor];
 }
 
 void _appointmentAttach(
     IsarCollection<dynamic> col, Id id, Appointment object) {
   object.id = id;
+  object.doctor.attach(col, col.isar.collection<Doctor>(), r'doctor', id);
 }
 
 extension AppointmentQueryWhereSort
@@ -1007,7 +1016,20 @@ extension AppointmentQueryObject
     on QueryBuilder<Appointment, Appointment, QFilterCondition> {}
 
 extension AppointmentQueryLinks
-    on QueryBuilder<Appointment, Appointment, QFilterCondition> {}
+    on QueryBuilder<Appointment, Appointment, QFilterCondition> {
+  QueryBuilder<Appointment, Appointment, QAfterFilterCondition> doctor(
+      FilterQuery<Doctor> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'doctor');
+    });
+  }
+
+  QueryBuilder<Appointment, Appointment, QAfterFilterCondition> doctorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'doctor', 0, true, 0, true);
+    });
+  }
+}
 
 extension AppointmentQuerySortBy
     on QueryBuilder<Appointment, Appointment, QSortBy> {

@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/service/isar_service.dart';
+import 'package:medicine_notification_app/init/database/database_manager.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view.dart';
-import 'package:medicine_notification_app/repository/medicine_repository.dart';
+import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:provider/provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await FlutterLocalNotificationService().initNotification(); // düzeltildi
 
-   IsarService.openDB; // Bunu da await yapmalısın eğer Future dönüyorsa
-
+  await DatabaseManager().db;
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_) => IsarService()),
+        Provider(create: (_) => DatabaseManager()),
         ChangeNotifierProvider(
           create: (context) =>
-              AddMedicineViewModel(context.read<IsarService>()),
+              AddMedicineViewModel(medicineRepository: MedicineRepository()),
         ),
         Provider<MedicineRepository>(
-          create: (_) => IsarMedicineRepository(),
+          create: (_) => MedicineRepository(),
         ),
         ChangeNotifierProvider<HomeViewModel>(
           create: (context) =>
               HomeViewModel(context.read<MedicineRepository>()),
-        )
+        ),
       ],
       child: const MainApp(),
     ),
   );
 }
-
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
-import 'package:medicine_notification_app/service/isar_service.dart';
+import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
 
 class UpdateScreenViewModel extends ChangeNotifier {
-  final IsarService _isarService = IsarService();
+  final MedicineRepository _isarService = MedicineRepository();
 
   late Medicine medicine;
 

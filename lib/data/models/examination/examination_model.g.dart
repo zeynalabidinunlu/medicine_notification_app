@@ -49,7 +49,15 @@ const ExaminationSchema = CollectionSchema(
   deserializeProp: _examinationDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {},
+  links: {
+    r'doctor': LinkSchema(
+      id: 7214240389414743100,
+      name: r'doctor',
+      target: r'Doctor',
+      single: true,
+      linkName: r'examinations',
+    )
+  },
   embeddedSchemas: {},
   getId: _examinationGetId,
   getLinks: _examinationGetLinks,
@@ -140,12 +148,13 @@ Id _examinationGetId(Examination object) {
 }
 
 List<IsarLinkBase<dynamic>> _examinationGetLinks(Examination object) {
-  return [];
+  return [object.doctor];
 }
 
 void _examinationAttach(
     IsarCollection<dynamic> col, Id id, Examination object) {
   object.id = id;
+  object.doctor.attach(col, col.isar.collection<Doctor>(), r'doctor', id);
 }
 
 extension ExaminationQueryWhereSort
@@ -912,7 +921,20 @@ extension ExaminationQueryObject
     on QueryBuilder<Examination, Examination, QFilterCondition> {}
 
 extension ExaminationQueryLinks
-    on QueryBuilder<Examination, Examination, QFilterCondition> {}
+    on QueryBuilder<Examination, Examination, QFilterCondition> {
+  QueryBuilder<Examination, Examination, QAfterFilterCondition> doctor(
+      FilterQuery<Doctor> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'doctor');
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition> doctorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'doctor', 0, true, 0, true);
+    });
+  }
+}
 
 extension ExaminationQuerySortBy
     on QueryBuilder<Examination, Examination, QSortBy> {

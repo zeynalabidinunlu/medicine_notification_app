@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
-import 'package:medicine_notification_app/service/isar_service.dart';
+import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
 
 class AddMedicineViewModel extends ChangeNotifier {
-  final IsarService _isarService;
+  final MedicineRepository medicineRepository;
 
-  AddMedicineViewModel(this._isarService);
+  AddMedicineViewModel({required this.medicineRepository});
 
-  List<UsageTypes> selectedUsageType = []; // Boş liste olarak başlat
+  List<UsageTypes> selectedUsageType = [];
   HungerSituation? selectedHungerSituation;
 
   HungerSituation? get selectedHungerSituations => selectedHungerSituation;
@@ -29,45 +28,37 @@ class AddMedicineViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveUsageTypes(Id id, List<UsageTypes> usageTypes) async {
-    return await _isarService.saveUsageTypesToMedicine(id, usageTypes);
-  }
-
-  // Tüm listeyi set etme metodu
   void setUsageTypes(List<UsageTypes> usageTypes) {
     selectedUsageType = List.from(usageTypes);
     notifyListeners();
   }
 
-  // Seçili usage type'ları temizleme metodu
   void clearUsageTypes() {
     selectedUsageType.clear();
     notifyListeners();
   }
 
   Future<void> saveMedicine(Medicine newMedicine) async {
-    await _isarService.saveMedicine(newMedicine);
+    await medicineRepository.addMedicine(newMedicine);
     notifyListeners();
   }
 
   Future<List<Medicine>> getAllMedicine() async {
-    List<Medicine> listOffAllMedicine = await _isarService.getAllMedicine();
+    List<Medicine> listOffAllMedicine = await medicineRepository.getAllMedicines();
     notifyListeners();
     return listOffAllMedicine;
   }
 
   Future<void> updateMedicine(int id, Medicine updateMedicine) async {
-    await _isarService.updateMedicine(id, updateMedicine);
+    await medicineRepository.updateMedicine(id, updateMedicine);
     notifyListeners();
   }
 
   Future<void> deleteMedicine(int medicineId) async {
     try {
-      await _isarService.deleteMedicine(medicineId);
+      await medicineRepository.deleteMedicine(medicineId);
       notifyListeners();
     } catch (e) {
-      // Hata durumunda kullanıcıya bilgi ver
-      // ignore: avoid_print
       print('İlaç silme hatası: $e');
       rethrow;
     }
