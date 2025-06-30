@@ -26,4 +26,5 @@ AppointmentViewModel(this._appointmentRepository);
     await _appointmentRepository.deleteAppointment(id);
     notifyListeners();
   }
+  
 }

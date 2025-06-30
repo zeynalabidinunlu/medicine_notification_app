@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view_model.dart';
+import 'package:medicine_notification_app/presentation/appointment/widgets/adding_appointment.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentView extends StatelessWidget {
@@ -11,6 +12,19 @@ class AppointmentView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Randevular'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  AddingAppointment(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: vm.getAllAppointments(),
