@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/presentation/examination/adding_examination.dart';
+import 'package:medicine_notification_app/presentation/examination/widgets/adding_examination.dart';
 import 'package:medicine_notification_app/presentation/examination/examination_view_model.dart';
+import 'package:medicine_notification_app/presentation/examination/widgets/examination_detail.dart';
 import 'package:provider/provider.dart';
 
 class ExaminationView extends StatelessWidget {
@@ -41,9 +42,21 @@ class ExaminationView extends StatelessWidget {
               itemCount: examinations.length,
               itemBuilder: (context, index) {
                 final examination = examinations[index];
-                return ListTile(
-                  title: Text(examination.patientComplaint.toString()),
-                  subtitle: Text(examination.examinationDate.toString()),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExaminationDetail(
+                          examination: examination,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(examination.patientComplaint.toString()),
+                    subtitle: Text(examination.examinationDate.toString()),
+                  ),
                 );
               },
             );

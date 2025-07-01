@@ -122,6 +122,21 @@ class _AddingExaminationState extends State<AddingExamination> {
     );
   }
 
+  Future<void> _selectDateForNextControl(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _nextControlTimeController.text =
+            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+      });
+    }
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -139,7 +154,7 @@ class _AddingExaminationState extends State<AddingExamination> {
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Muayene Ekle'),
       ),
@@ -148,98 +163,101 @@ class _AddingExaminationState extends State<AddingExamination> {
           16.0,
         ),
         child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _patientComplaintController,
-                    decoration: const InputDecoration(
-                        labelText: 'Hasta Şikayetinizi Girin'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen hasta şikayetini girin';
-                      }
-                      return null;
-                    },
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _patientComplaintController,
+                  decoration: const InputDecoration(
+                      labelText: 'Hasta Şikayetinizi Girin'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Lütfen hasta şikayetini girin';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _treatmentProcessController,
+                  decoration:
+                      const InputDecoration(labelText: 'Tedavi Sürecini Girin'),
+                ),
+                TextFormField(
+                  controller: _examinationNotesController,
+                  decoration: const InputDecoration(
+                      labelText: 'Muayene Notlarını Girin'),
+                ),
+                TextFormField(
+                  controller: _nextControlTimeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Sonraki Kontrol Zamanını Girin (YYYY-MM-DD)',
                   ),
-                  TextFormField(
-                    controller: _treatmentProcessController,
-                    decoration: const InputDecoration(
-                        labelText: 'Tedavi Sürecini Girin'),
-                  ),
-                  TextFormField(
-                    controller: _examinationNotesController,
-                    decoration: const InputDecoration(
-                        labelText: 'Muayene Notlarını Girin'),
-                  ),
-                  TextFormField(
-                    controller: _nextControlTimeController,
-                    decoration: const InputDecoration(
-                        labelText:
-                            'Sonraki Kontrol Zamanını Girin (YYYY-MM-DD)'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen sonraki kontrol zamanını girin';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: _examinationDateController,
-                    decoration: const InputDecoration(
-                        labelText: 'Muayene Tarihini Girin (YYYY-MM-DD)'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen muayene tarihini girin';
-                      }
-                      return null;
-                    },
-                    onTap: () => _selectDate(context),
-                  ),
-                  DropdownButtonFormField<AppointmentTypes>(
-                    value: _selectedAppointmentType,
-                    decoration: const InputDecoration(
-                        labelText: 'Muayene Türünü Seçin'),
-                    items: AppointmentTypes.values.map((type) {
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Lütfen sonraki kontrol zamanını girin';
+                    }
+                    return null;
+                  },
+                  readOnly: true, // Klavye açılmasını engeller
+                  onTap: () => _selectDateForNextControl(context),
+                ),
+                TextFormField(
+                  controller: _examinationDateController,
+                  decoration: const InputDecoration(
+                      labelText: 'Muayene Tarihini Girin (YYYY-MM-DD)'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Lütfen muayene tarihini girin';
+                    }
+                    return null;
+                  },
+                  onTap: () => _selectDate(context),
+                ),
+                DropdownButtonFormField<AppointmentTypes>(
+                  value: _selectedAppointmentType,
+                  decoration:
+                      const InputDecoration(labelText: 'Muayene Türünü Seçin'),
+                  items: AppointmentTypes.values.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(type.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedAppointmentType = value;
+                    });
+                  },
+                ),
+                if (isLoadingDoctors)
+                  const CircularProgressIndicator()
+                else
+                  DropdownButtonFormField<Doctor>(
+                    value: _selectedDoctor,
+                    decoration:
+                        const InputDecoration(labelText: 'Doktor Seçin'),
+                    items: _doctors.map((doctor) {
                       return DropdownMenuItem(
-                        value: type,
-                        child: Text(type.name),
+                        value: doctor,
+                        child: Text(doctor.name.toString()),
                       );
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        _selectedAppointmentType = value;
+                        _selectedDoctor = value;
                       });
                     },
                   ),
-                  if (isLoadingDoctors)
-                    const CircularProgressIndicator()
-                  else
-                    DropdownButtonFormField<Doctor>(
-                      value: _selectedDoctor,
-                      decoration:
-                          const InputDecoration(labelText: 'Doktor Seçin'),
-                      items: _doctors.map((doctor) {
-                        return DropdownMenuItem(
-                          value: doctor,
-                          child: Text(doctor.name.toString()),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedDoctor = value;
-                        });
-                      },
-                    ),
                 const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _saveExamination,
-                    child: const Text('Muayeneyi Kaydet'),
-                  ),
-                ],
-              ),
-            ),),
+                ElevatedButton(
+                  onPressed: _saveExamination,
+                  child: const Text('Muayeneyi Kaydet'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

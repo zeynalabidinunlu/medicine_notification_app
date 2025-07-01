@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
+import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
+import 'package:medicine_notification_app/presentation/examination/widgets/examination_detail.dart';
 import 'package:medicine_notification_app/repository/doctors/doctors_repository.dart';
 import 'package:provider/provider.dart';
 
@@ -36,26 +38,49 @@ class DoctorDetailView extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text('Randevular:',
                     style: Theme.of(context).textTheme.titleMedium),
-                ...doctor.appointments.map((appointment) => Card(
-                      child: ListTile(
-                        title: Text(appointment.hospitalName ?? ''),
-                        subtitle: Text(appointment.appointmentNotes ?? ''),
-                        trailing: Text(appointment.appointmentDate
-                                ?.toString()
-                                .split(' ')[0] ??
-                            ''),
+                ...doctor.appointments.map((appointment) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppointmentDetail(
+                              appointment: appointment,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(appointment.hospitalName ?? ''),
+                          subtitle: Text(appointment.appointmentNotes ?? ''),
+                          trailing: Text(appointment.appointmentDate
+                                  ?.toString()
+                                  .split(' ')[0] ??
+                              ''),
+                        ),
                       ),
                     )),
                 const SizedBox(height: 20),
                 Text('Muayeneler:',
                     style: Theme.of(context).textTheme.titleMedium),
-                ...doctor.examinations.map((examination) => Card(
-                      child: ListTile(
-                        title: Text(examination.examinationNotes ?? ''),
-                        trailing: Text(examination.examinationDate
-                                ?.toString()
-                                .split(' ')[0] ??
-                            ''),
+                ...doctor.examinations.map((examination) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExaminationDetail(
+                                examination: examination,
+                              ),
+                            ));
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(examination.examinationNotes ?? ''),
+                          trailing: Text(examination.examinationDate
+                                  ?.toString()
+                                  .split(' ')[0] ??
+                              ''),
+                        ),
                       ),
                     )),
               ],
