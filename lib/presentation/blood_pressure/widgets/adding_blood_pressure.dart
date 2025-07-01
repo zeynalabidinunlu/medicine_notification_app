@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/data/models/blood_pressure/blood_pressure_model.dart';
 import 'package:medicine_notification_app/presentation/blood_pressure/blood_pressure_view_model.dart';
 import 'package:provider/provider.dart';
@@ -81,84 +83,66 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
       appBar: AppBar(
         title: const Text('Kan Basıncı Ekle'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _systolicController,
-                decoration: const InputDecoration(labelText: 'Sistolik'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Sistolik değeri boş bırakılamaz';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _diastolicController,
-                decoration: const InputDecoration(labelText: 'Diastolik'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Diastolik değeri boş bırakılamaz';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _pulseController,
-                decoration: const InputDecoration(labelText: 'Nabız'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Nabız değeri boş bırakılamaz';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _measurementDateController,
-                decoration: const InputDecoration(
-                  labelText: 'Ölçüm Tarihi',
-                  suffixIcon: Icon(Icons.calendar_today),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            CustomTextFormField(
+              controller: _systolicController,
+              labelText: 'Sistolik (Büyük Tansiyon)',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Sistolik değeri boş bırakılamaz';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16),
+            CustomTextFormField(
+              controller: _diastolicController,
+              labelText: 'Diastolik (Küçük Tansiyon)',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Diastolik değeri boş bırakılamaz';
+                }
+                return null;
+              },
+            ),
+            CustomTextFormField(
+              controller: _pulseController,
+              labelText: 'Nabız',
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Nabız değeri boş bırakılamaz';
+                }
+                return null;
+              },
+            ),
+            DatePickerField(
+              controller: _measurementDateController,
+              labelText: "Ölçüm Tarihi",
+            ),
+            CustomTextFormField(
+              controller: _notesController,
+              labelText: 'Notlar',
+              maxLines: 3,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _saveBloodPressure();
+                  },
+                  child: const Text('Ekle'),
                 ),
-                readOnly: true, // Manuel girişi engelleyin
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime.now(),
-                  );
-                  if (date != null) {
-                    _measurementDateController.text =
-                        date.toString().split(' ')[0];
-                  }
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Ölçüm tarihi boş bırakılamaz';
-                  }
-                  return null;
-                },
               ),
-              TextFormField(
-                controller: _notesController,
-                decoration: const InputDecoration(labelText: 'Ölçüm Notları'),
-                maxLines: 3,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _saveBloodPressure();
-                },
-                child: const Text('Ekle'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

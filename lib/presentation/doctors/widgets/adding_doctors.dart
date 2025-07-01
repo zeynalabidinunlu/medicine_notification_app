@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/presentation/doctors/doctors_view_model.dart';
@@ -18,24 +19,21 @@ class _AddingDoctorsState extends State<AddingDoctors> {
   final TextEditingController _clinicNameController = TextEditingController();
   final TextEditingController _hospitalNameController = TextEditingController();
 
-
   @override
   void dispose() {
     _doctorNameController.dispose();
     _clinicNameController.dispose();
-  
+
     super.dispose();
   }
 
-  
   void _saveDoctor() async {
     if (_formKey.currentState!.validate()) {
       final vm = context.read<DoctorsViewModel>();
       final doctor = Doctor()
         ..name = _doctorNameController.text
         ..klinik = _clinicNameController.text
-        ..daysOff = _selectedDayOff
-        ;
+        ..daysOff = _selectedDayOff;
       await vm.saveDoctor(doctor);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Doktor başarıyla eklendi!')),
@@ -56,12 +54,9 @@ class _AddingDoctorsState extends State<AddingDoctors> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextFormField(
+              CustomTextFormField(
                 controller: _doctorNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Doktor Adı',
-                  border: OutlineInputBorder(),
-                ),
+                labelText: 'Doktor Adı',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Doktor adı gerekli';
@@ -69,13 +64,9 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
-              TextFormField(
+              CustomTextFormField(
                 controller: _clinicNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Klinik Adı',
-                  border: OutlineInputBorder(),
-                ),
+                labelText: 'Klinik Adı',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Klinik adı gerekli';
@@ -83,8 +74,15 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                   return null;
                 },
               ),
-              SizedBox(
-                height: 16,
+              CustomTextFormField(
+                controller: _hospitalNameController,
+                labelText: 'Hastane Adı',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Hastane adı gerekli';
+                  }
+                  return null;
+                },
               ),
               DropdownButtonFormField<Days>(
                 value: _selectedDayOff,
@@ -104,21 +102,6 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                   });
                 },
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _hospitalNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Hastane Adı',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Hastane adı gerekli';
-                  }
-                  return null;
-                },
-              ),
-         
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _saveDoctor,

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
+import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
+import 'package:medicine_notification_app/common/widgets/doctor_dropdown.dart';
+import 'package:medicine_notification_app/common/widgets/time_picker_field.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/data/models/examination/examination_model.dart';
@@ -27,7 +32,6 @@ class _AddingExaminationState extends State<AddingExamination> {
   final TextEditingController _examinationDateController =
       TextEditingController();
 
-  List<Doctor> _doctors = [];
   Doctor? _selectedDoctor;
   bool isLoadingDoctors = true;
 
@@ -39,11 +43,8 @@ class _AddingExaminationState extends State<AddingExamination> {
 
   Future<void> _loadDoctors() async {
     try {
-      final doctorsRepository =
-          Provider.of<DoctorsRepository>(context, listen: false);
-      final doctorsList = await doctorsRepository.getAllDoctors();
+      Provider.of<DoctorsRepository>(context, listen: false);
       setState(() {
-        _doctors = doctorsList;
         isLoadingDoctors = false;
       });
     } catch (e) {
@@ -122,36 +123,6 @@ class _AddingExaminationState extends State<AddingExamination> {
     );
   }
 
-  Future<void> _selectDateForNextControl(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _nextControlTimeController.text =
-            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-      });
-    }
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _examinationDateController.text =
-            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,10 +138,9 @@ class _AddingExaminationState extends State<AddingExamination> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                CustomTextFormField(
                   controller: _patientComplaintController,
-                  decoration: const InputDecoration(
-                      labelText: 'Hasta Şikayetinizi Girin'),
+                  labelText: 'Hasta Şikayeti',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Lütfen hasta şikayetini girin';
@@ -178,77 +148,46 @@ class _AddingExaminationState extends State<AddingExamination> {
                     return null;
                   },
                 ),
-                TextFormField(
+                
+                CustomTextFormField(
                   controller: _treatmentProcessController,
-                  decoration:
-                      const InputDecoration(labelText: 'Tedavi Sürecini Girin'),
+                  labelText: "Tedavi Süreci Hakkında Notlarınızı Girin",
                 ),
-                TextFormField(
+                CustomTextFormField(
                   controller: _examinationNotesController,
-                  decoration: const InputDecoration(
-                      labelText: 'Muayene Notlarını Girin'),
+                  labelText: 'Muayene Notları',
                 ),
-                TextFormField(
+                TimePickerField(
                   controller: _nextControlTimeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Sonraki Kontrol Zamanını Girin (YYYY-MM-DD)',
-                  ),
+                  labelText: "Sonraki Kontrol Zamanı",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Lütfen sonraki kontrol zamanını girin';
                     }
                     return null;
                   },
-                  readOnly: true, // Klavye açılmasını engeller
-                  onTap: () => _selectDateForNextControl(context),
                 ),
-                TextFormField(
+                DatePickerField(
                   controller: _examinationDateController,
-                  decoration: const InputDecoration(
-                      labelText: 'Muayene Tarihini Girin (YYYY-MM-DD)'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Lütfen muayene tarihini girin';
-                    }
-                    return null;
-                  },
-                  onTap: () => _selectDate(context),
+                  labelText: "Muayene Tarihi",
                 ),
-                DropdownButtonFormField<AppointmentTypes>(
-                  value: _selectedAppointmentType,
-                  decoration:
-                      const InputDecoration(labelText: 'Muayene Türünü Seçin'),
-                  items: AppointmentTypes.values.map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedAppointmentType = value;
-                    });
-                  },
-                ),
+                AppointmentTypeDropdown(onChanged: (selectedType) {
+                  setState(() {
+                    _selectedAppointmentType = selectedType;
+                  });
+                }),
+                const SizedBox(height: 20),
                 if (isLoadingDoctors)
                   const CircularProgressIndicator()
                 else
-                  DropdownButtonFormField<Doctor>(
-                    value: _selectedDoctor,
-                    decoration:
-                        const InputDecoration(labelText: 'Doktor Seçin'),
-                    items: _doctors.map((doctor) {
-                      return DropdownMenuItem(
-                        value: doctor,
-                        child: Text(doctor.name.toString()),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedDoctor = value;
-                      });
-                    },
-                  ),
+                  DoctorDropdown(
+                      onChanged: (selected) {
+                        setState(() {
+                          _selectedDoctor = selected;
+                        });
+                      },
+                      selectedDoctor: _selectedDoctor,
+                      labelText: 'Doktor Seçin'),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _saveExamination,

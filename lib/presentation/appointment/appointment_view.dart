@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/adding_appointment.dart';
+import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentView extends StatelessWidget {
@@ -19,7 +20,7 @@ class AppointmentView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  AddingAppointment(),
+                  builder: (context) => AddingAppointment(),
                 ),
               );
             },
@@ -41,9 +42,21 @@ class AppointmentView extends StatelessWidget {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final appointment = appointments[index];
-                return ListTile(
-                  title: Text(appointment.hospitalName.toString()),
-                  subtitle: Text(appointment.appointmentDate.toString()),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AppointmentDetail(
+                          appointment: appointment,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(appointment.hospitalName.toString()),
+                    subtitle: Text(appointment.appointmentDate.toString()),
+                  ),
                 );
               },
             );

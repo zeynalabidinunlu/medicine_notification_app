@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
+import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
+import 'package:medicine_notification_app/common/widgets/doctor_dropdown.dart';
+import 'package:medicine_notification_app/common/widgets/time_picker_field.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/appointment/appointment_model.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
@@ -154,32 +159,6 @@ class _AddingAppointmentState extends State<AddingAppointment> {
     return DateTime(year, month, day, timeOfDay.hour, timeOfDay.minute);
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _appointmentDateController.text =
-            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-      });
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        _appointmentTimeController.text = pickedTime.format(context);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +173,10 @@ class _AddingAppointmentState extends State<AddingAppointment> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                CustomTextFormField(
+                  labelText: 'Hastane Adı',
                   controller: _hospitalNameController,
-                  decoration: const InputDecoration(labelText: 'Hastane Adı'),
+                  //   decoration: const InputDecoration(labelText: 'Hastane Adı'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Lütfen hastane adını girin';
@@ -204,107 +184,37 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
+                DatePickerField(
                   controller: _appointmentDateController,
-                  decoration: const InputDecoration(
-                    labelText: 'Randevu Tarihi',
-                    suffixIcon: Icon(Icons.calendar_today),
-                  ),
-                  readOnly: true,
-                  onTap: () => _selectDate(context),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Lütfen randevu tarihini seçin';
-                    }
-                    return null;
-                  },
+                  labelText: "Randevu Tarihi",
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _appointmentTimeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Randevu Saati',
-                    suffixIcon: Icon(Icons.access_time),
-                  ),
-                  readOnly: true,
-                  onTap: () => _selectTime(context),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Lütfen randevu saatini seçin';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
+                TimePickerField(
+                    controller: _appointmentTimeController,
+                    labelText: "Randevu Saaaati"),
+                CustomTextFormField(
                   controller: _clinicNameController,
-                  decoration: const InputDecoration(labelText: 'Klinik Adı'),
+                  labelText: 'Klinik Adı',
                 ),
-                const SizedBox(height: 16),
-
-             
-                DropdownButtonFormField<AppointmentTypes>(
-                  value: _selectedAppointmentType,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Randevu Türü',
-                  ),
-                  items: AppointmentTypes.values.map((AppointmentTypes type) {
-                    return DropdownMenuItem<AppointmentTypes>(
-                      value: type,
-                      child: Text(type.name),
-                    );
-                  }).toList(),
-                  onChanged: (AppointmentTypes? newValue) {
-                    setState(() {
-                      _selectedAppointmentType = newValue;
-                    });
-                  },
-                ),
-                TextFormField(
+                  CustomTextFormField(
                   controller: _notesController,
-                  decoration: const InputDecoration(labelText: 'Notlar'),
+                  labelText: 'Notlar',
                   maxLines: 3,
                 ),
+                AppointmentTypeDropdown(onChanged: (selectedType) {
+                  setState(() {
+                    _selectedAppointmentType = selectedType;
+                  });
+                }),
                 const SizedBox(height: 16),
-
-                // Doctor Dropdown - Fixed version
-                Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: isLoadingDoctors
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : DropdownButtonHideUnderline(
-                          child: DropdownButton<Doctor>(
-                            hint: const Text('Doktor Seçin'),
-                            value: selectedDoctor,
-                            isExpanded: true,
-                            items: doctors.map((Doctor doctor) {
-                              return DropdownMenuItem<Doctor>(
-                                value: doctor,
-                                child: Text(doctor.name ?? 'Bilinmiyor'),
-                              );
-                            }).toList(),
-                            onChanged: (Doctor? newSelectedDoctor) {
-                              setState(() {
-                                selectedDoctor = newSelectedDoctor;
-                              });
-                            },
-                          ),
-                        ),
-                ),
-
+              
+                DoctorDropdown(
+                    onChanged: (selected) {
+                      setState(() {
+                        selectedDoctor = selected;
+                      });
+                    },
+                    selectedDoctor: selectedDoctor,
+                    labelText: 'Doktor Seçin'),
                 const SizedBox(height: 32),
                 SizedBox(
                   width: double.infinity,
