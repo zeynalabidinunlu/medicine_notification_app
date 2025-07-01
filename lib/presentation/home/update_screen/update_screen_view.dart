@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
+import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:medicine_notification_app/utils/widgets/selection_chip.dart';
 import 'package:provider/provider.dart';
@@ -95,6 +96,7 @@ class _UpdateScreenViewState extends State<UpdateScreenView> {
         }
 
         if (mounted) {
+          Provider.of<HomeViewModel>(context, listen: false).loadMedicines();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('İlaç güncellendi')),
           );

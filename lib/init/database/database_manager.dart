@@ -1,11 +1,10 @@
 import 'package:isar/isar.dart';
 import 'package:medicine_notification_app/data/models/appointment/appointment_model.dart';
+import 'package:medicine_notification_app/data/models/blood_pressure/blood_pressure_model.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/data/models/examination/examination_model.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:path_provider/path_provider.dart';
-
-
 
 class DatabaseManager {
   static final DatabaseManager _instance = DatabaseManager._internal();
@@ -31,7 +30,8 @@ class DatabaseManager {
         MedicineSchema,
         AppointmentSchema,
         DoctorSchema,
-        ExaminationSchema
+        ExaminationSchema,
+        BloodPressureSchema
       ],
       directory: dir.path,
       inspector: true, // geliştirirken Isar Inspector kullanmak istersen

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/utils/delete_confirm_dialog.dart';
-import 'package:medicine_notification_app/presentation/update_screen/update_screen_view.dart';
+import 'package:medicine_notification_app/presentation/home/update_screen/update_screen_view.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:provider/provider.dart';
 

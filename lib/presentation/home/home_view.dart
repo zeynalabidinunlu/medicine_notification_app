@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view.dart';
+import 'package:medicine_notification_app/presentation/blood_pressure/blood_pressure_view.dart';
 import 'package:medicine_notification_app/presentation/doctors/doctors_view.dart';
 import 'package:medicine_notification_app/presentation/examination/examination_view.dart';
 import 'package:medicine_notification_app/presentation/home/widgets/home_page_content.dart';
@@ -21,6 +22,7 @@ class _HomeViewState extends State<HomeView> {
     AppointmentView(),
     ExaminationView(),
     DoctorsView(),
+    BloodPressureView()
   ];
 
   void _onItemTapped(int index) {
@@ -50,6 +52,8 @@ class _HomeViewState extends State<HomeView> {
               label: "Muayeneler"),
           BottomNavigationBarItem(
               icon: Icon(Icons.person_outline), label: "Doktorlarım"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.monitor_heart_outlined), label: "Kan Basıncı"),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

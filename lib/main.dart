@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/init/database/database_manager.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view_model.dart';
+import 'package:medicine_notification_app/presentation/blood_pressure/blood_pressure_view_model.dart';
 import 'package:medicine_notification_app/presentation/doctors/doctors_view_model.dart';
 import 'package:medicine_notification_app/presentation/examination/examination_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view.dart';
 import 'package:medicine_notification_app/repository/appointment/appointment_repository.dart';
+import 'package:medicine_notification_app/repository/blood_pressure/blood_pressure_repository.dart';
 import 'package:medicine_notification_app/repository/doctors/doctors_repository.dart';
 import 'package:medicine_notification_app/repository/examination/examination_repository.dart';
 import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
@@ -16,7 +18,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await FlutterLocalNotificationService().initNotification(); // düzeltildi
+  await FlutterLocalNotificationService().initNotification();
 
   await DatabaseManager().db;
   runApp(
@@ -53,6 +55,12 @@ void main() async {
           create: (context) => ExaminationViewModel(
             context.read<ExaminationRepository>(),
           ),
+        ),
+        Provider<BloodPressureRepository>(
+            create: (_) => BloodPressureRepository()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              BloodPressureViewModel(context.read<BloodPressureRepository>()),
         ),
       ],
       child: const MainApp(),
