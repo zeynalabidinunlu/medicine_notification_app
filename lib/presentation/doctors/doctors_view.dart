@@ -59,7 +59,7 @@ class DoctorsView extends StatelessWidget {
                         subtitle: Text(
                           doctor.appointments.isEmpty
                               ? 'Randevu yok'
-                              : 'Randevular: ${doctor.appointments.first.hospitalName}', // Access the first appointment's hospitalName
+                              : 'Hastane Adı: ${doctor.appointments.first.hospitalName}', // Access the first appointment's hospitalName
                         ),
                       ));
                 },

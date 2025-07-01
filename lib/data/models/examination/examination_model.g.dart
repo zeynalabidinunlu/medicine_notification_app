@@ -17,28 +17,34 @@ const ExaminationSchema = CollectionSchema(
   name: r'Examination',
   id: -3740389584940768101,
   properties: {
-    r'examinationDate': PropertySchema(
+    r'appointmentTypes': PropertySchema(
       id: 0,
+      name: r'appointmentTypes',
+      type: IsarType.string,
+      enumMap: _ExaminationappointmentTypesEnumValueMap,
+    ),
+    r'examinationDate': PropertySchema(
+      id: 1,
       name: r'examinationDate',
       type: IsarType.dateTime,
     ),
     r'examinationNotes': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'examinationNotes',
       type: IsarType.string,
     ),
     r'nextControlTime': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'nextControlTime',
       type: IsarType.dateTime,
     ),
     r'patientComplaint': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'patientComplaint',
       type: IsarType.string,
     ),
     r'treatmentProcess': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'treatmentProcess',
       type: IsarType.string,
     )
@@ -72,6 +78,12 @@ int _examinationEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.appointmentTypes;
+    if (value != null) {
+      bytesCount += 3 + value.name.length * 3;
+    }
+  }
+  {
     final value = object.examinationNotes;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -98,11 +110,12 @@ void _examinationSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.examinationDate);
-  writer.writeString(offsets[1], object.examinationNotes);
-  writer.writeDateTime(offsets[2], object.nextControlTime);
-  writer.writeString(offsets[3], object.patientComplaint);
-  writer.writeString(offsets[4], object.treatmentProcess);
+  writer.writeString(offsets[0], object.appointmentTypes?.name);
+  writer.writeDateTime(offsets[1], object.examinationDate);
+  writer.writeString(offsets[2], object.examinationNotes);
+  writer.writeDateTime(offsets[3], object.nextControlTime);
+  writer.writeString(offsets[4], object.patientComplaint);
+  writer.writeString(offsets[5], object.treatmentProcess);
 }
 
 Examination _examinationDeserialize(
@@ -112,12 +125,14 @@ Examination _examinationDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Examination();
-  object.examinationDate = reader.readDateTimeOrNull(offsets[0]);
-  object.examinationNotes = reader.readStringOrNull(offsets[1]);
+  object.appointmentTypes = _ExaminationappointmentTypesValueEnumMap[
+      reader.readStringOrNull(offsets[0])];
+  object.examinationDate = reader.readDateTimeOrNull(offsets[1]);
+  object.examinationNotes = reader.readStringOrNull(offsets[2]);
   object.id = id;
-  object.nextControlTime = reader.readDateTimeOrNull(offsets[2]);
-  object.patientComplaint = reader.readStringOrNull(offsets[3]);
-  object.treatmentProcess = reader.readStringOrNull(offsets[4]);
+  object.nextControlTime = reader.readDateTimeOrNull(offsets[3]);
+  object.patientComplaint = reader.readStringOrNull(offsets[4]);
+  object.treatmentProcess = reader.readStringOrNull(offsets[5]);
   return object;
 }
 
@@ -129,19 +144,31 @@ P _examinationDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (_ExaminationappointmentTypesValueEnumMap[
+          reader.readStringOrNull(offset)]) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
-    case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
-    case 3:
+    case 2:
       return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _ExaminationappointmentTypesEnumValueMap = {
+  r'ILK_MUAYENE': r'ILK_MUAYENE',
+  r'KONTROL': r'KONTROL',
+};
+const _ExaminationappointmentTypesValueEnumMap = {
+  r'ILK_MUAYENE': AppointmentTypes.ILK_MUAYENE,
+  r'KONTROL': AppointmentTypes.KONTROL,
+};
 
 Id _examinationGetId(Examination object) {
   return object.id ?? Isar.autoIncrement;
@@ -237,6 +264,160 @@ extension ExaminationQueryWhere
 
 extension ExaminationQueryFilter
     on QueryBuilder<Examination, Examination, QFilterCondition> {
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'appointmentTypes',
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'appointmentTypes',
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesEqualTo(
+    AppointmentTypes? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesGreaterThan(
+    AppointmentTypes? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesLessThan(
+    AppointmentTypes? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesBetween(
+    AppointmentTypes? lower,
+    AppointmentTypes? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'appointmentTypes',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'appointmentTypes',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'appointmentTypes',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'appointmentTypes',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterFilterCondition>
+      appointmentTypesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'appointmentTypes',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Examination, Examination, QAfterFilterCondition>
       examinationDateIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -938,6 +1119,20 @@ extension ExaminationQueryLinks
 
 extension ExaminationQuerySortBy
     on QueryBuilder<Examination, Examination, QSortBy> {
+  QueryBuilder<Examination, Examination, QAfterSortBy>
+      sortByAppointmentTypes() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'appointmentTypes', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterSortBy>
+      sortByAppointmentTypesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'appointmentTypes', Sort.desc);
+    });
+  }
+
   QueryBuilder<Examination, Examination, QAfterSortBy> sortByExaminationDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'examinationDate', Sort.asc);
@@ -1009,6 +1204,20 @@ extension ExaminationQuerySortBy
 
 extension ExaminationQuerySortThenBy
     on QueryBuilder<Examination, Examination, QSortThenBy> {
+  QueryBuilder<Examination, Examination, QAfterSortBy>
+      thenByAppointmentTypes() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'appointmentTypes', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Examination, Examination, QAfterSortBy>
+      thenByAppointmentTypesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'appointmentTypes', Sort.desc);
+    });
+  }
+
   QueryBuilder<Examination, Examination, QAfterSortBy> thenByExaminationDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'examinationDate', Sort.asc);
@@ -1092,6 +1301,14 @@ extension ExaminationQuerySortThenBy
 
 extension ExaminationQueryWhereDistinct
     on QueryBuilder<Examination, Examination, QDistinct> {
+  QueryBuilder<Examination, Examination, QDistinct> distinctByAppointmentTypes(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'appointmentTypes',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Examination, Examination, QDistinct>
       distinctByExaminationDate() {
     return QueryBuilder.apply(this, (query) {
@@ -1136,6 +1353,13 @@ extension ExaminationQueryProperty
   QueryBuilder<Examination, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Examination, AppointmentTypes?, QQueryOperations>
+      appointmentTypesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'appointmentTypes');
     });
   }
 

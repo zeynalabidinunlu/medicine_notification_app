@@ -3,10 +3,12 @@ import 'package:medicine_notification_app/init/database/database_manager.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view_model.dart';
 import 'package:medicine_notification_app/presentation/doctors/doctors_view_model.dart';
+import 'package:medicine_notification_app/presentation/examination/examination_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view.dart';
 import 'package:medicine_notification_app/repository/appointment/appointment_repository.dart';
 import 'package:medicine_notification_app/repository/doctors/doctors_repository.dart';
+import 'package:medicine_notification_app/repository/examination/examination_repository.dart';
 import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +46,12 @@ void main() async {
         ChangeNotifierProvider<AppointmentViewModel>(
           create: (context) => AppointmentViewModel(
             context.read<AppointmentRepository>(),
+          ),
+        ),
+        Provider<ExaminationRepository>(create: (_) => ExaminationRepository()),
+        ChangeNotifierProvider<ExaminationViewModel>(
+          create: (context) => ExaminationViewModel(
+            context.read<ExaminationRepository>(),
           ),
         ),
       ],

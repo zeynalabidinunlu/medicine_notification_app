@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view.dart';
 import 'package:medicine_notification_app/presentation/doctors/doctors_view.dart';
+import 'package:medicine_notification_app/presentation/examination/examination_view.dart';
 import 'package:medicine_notification_app/presentation/home/widgets/home_page_content.dart';
 
 class HomeView extends StatefulWidget {
@@ -18,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
     HomePageContent(),
     AddMedicineView(),
     AppointmentView(),
+    ExaminationView(),
     DoctorsView(),
   ];
 
@@ -44,7 +46,10 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today_outlined), label: "Randevular"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: "Doktorlarım")
+              icon: Icon(Icons.health_and_safety_outlined),
+              label: "Muayeneler"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline), label: "Doktorlarım"),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
