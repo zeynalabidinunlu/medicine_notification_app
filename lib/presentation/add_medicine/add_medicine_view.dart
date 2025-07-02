@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/add_medicine/add_medicine_view_model.dart';
@@ -86,11 +87,8 @@ class _AddMedicineViewState extends State<AddMedicineView> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('İlaç başarıyla eklendi')),
           );
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomeView(),
-              ));
+        
+        context.fadeToPage(HomeView());
         }
       } catch (e) {
         if (mounted) {

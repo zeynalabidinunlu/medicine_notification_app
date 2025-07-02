@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
 import 'package:medicine_notification_app/presentation/examination/widgets/examination_detail.dart';
@@ -40,13 +41,9 @@ class DoctorDetailView extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium),
                 ...doctor.appointments.map((appointment) => GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppointmentDetail(
-                              appointment: appointment,
-                            ),
-                          ),
+                       
+                        context.fadeToPage(
+                          AppointmentDetail(appointment: appointment),
                         );
                       },
                       child: Card(
@@ -63,24 +60,35 @@ class DoctorDetailView extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text('Muayeneler:',
                     style: Theme.of(context).textTheme.titleMedium),
-                ...doctor.examinations.map((examination) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExaminationDetail(
-                                examination: examination,
-                              ),
-                            ));
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(examination.examinationNotes ?? ''),
-                          trailing: Text(examination.examinationDate
-                                  ?.toString()
-                                  .split(' ')[0] ??
-                              ''),
+                ...doctor.examinations.map((examination) => Card(
+                      elevation: 8.0,
+                      child: ListTile(
+                        onTap: () {
+                        context.fadeToPage(
+                          ExaminationDetail(examination: examination),
+                        );
+                        },
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(examination.examinationNotes.toString()),
+                            Text(examination.examinationDate
+                                    ?.toString()
+                                    .split(' ')[0] ??
+                                ''),
+                            Text(
+                              examination.appointmentTypes
+                                      ?.toString()
+                                      .split('.')
+                                      .last
+                                      .replaceAll('_', ' ') ??
+                                  '',
+                            )
+                          ],
                         ),
+                        leading: const Icon(Icons.medical_services),
+                        title: Text(examination.patientComplaint ?? ''),
+                        trailing: const Icon(Icons.arrow_forward_ios),
                       ),
                     )),
               ],

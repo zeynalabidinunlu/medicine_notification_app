@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
+import 'package:medicine_notification_app/common/widgets/common_list_tile.dart';
 import 'package:medicine_notification_app/presentation/examination/widgets/adding_examination.dart';
 import 'package:medicine_notification_app/presentation/examination/examination_view_model.dart';
 import 'package:medicine_notification_app/presentation/examination/widgets/examination_detail.dart';
@@ -17,12 +19,7 @@ class ExaminationView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddingExamination(),
-                ),
-              );
+              context.fadeToPage(const AddingExamination());
             },
           ),
         ],
@@ -42,21 +39,16 @@ class ExaminationView extends StatelessWidget {
               itemCount: examinations.length,
               itemBuilder: (context, index) {
                 final examination = examinations[index];
-                return GestureDetector(
+                return CommonListTile(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExaminationDetail(
-                          examination: examination,
-                        ),
-                      ),
+                    context.fadeToPage(
+                      ExaminationDetail(examination: examination),
                     );
                   },
-                  child: ListTile(
-                    title: Text(examination.patientComplaint.toString()),
-                    subtitle: Text(examination.examinationDate.toString()),
-                  ),
+                  leadingIcon: Icons.medical_services,
+                  trailingIcon: Icons.arrow_forward_ios,
+                  title: examination.patientComplaint.toString(),
+                  subtitle: examination.examinationDate.toString(),
                 );
               },
             );

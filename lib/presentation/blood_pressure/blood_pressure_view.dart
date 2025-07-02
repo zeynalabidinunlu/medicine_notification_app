@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/data/models/blood_pressure/blood_pressure_model.dart';
 import 'package:medicine_notification_app/presentation/blood_pressure/blood_pressure_view_model.dart';
 import 'package:medicine_notification_app/presentation/blood_pressure/widgets/adding_blood_pressure.dart';
@@ -30,12 +31,7 @@ class _BloodPressureViewState extends State<BloodPressureView> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddingBloodPressure(),
-                ),
-              );
+              await context.fadeToPage(const AddingBloodPressure());
               // Yeni veri eklendikten sonra listeyi güncelle
               if (mounted) {
                 context.read<BloodPressureViewModel>().loadBloodPressures();
@@ -78,7 +74,8 @@ class _BloodPressureViewState extends State<BloodPressureView> {
               itemBuilder: (context, index) {
                 final bloodPressure = viewModel.bloodPressures[index];
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: ListTile(
                     title: Text(
                       'Sistolik: ${bloodPressure.systolic}, Diastolik: ${bloodPressure.diastolic}',
@@ -88,12 +85,14 @@ class _BloodPressureViewState extends State<BloodPressureView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Nabız: ${bloodPressure.pulse}'),
-                        Text('Tarih: ${bloodPressure.measurementDate?.toString().split(' ')[0] ?? 'Tarih yok'}'),
+                        Text(
+                            'Tarih: ${bloodPressure.measurementDate?.toString().split(' ')[0] ?? 'Tarih yok'}'),
                       ],
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _showDeleteDialog(context, viewModel, bloodPressure),
+                      onPressed: () =>
+                          _showDeleteDialog(context, viewModel, bloodPressure),
                     ),
                   ),
                 );
@@ -105,12 +104,14 @@ class _BloodPressureViewState extends State<BloodPressureView> {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, BloodPressureViewModel viewModel, BloodPressure bloodPressure) {
+  void _showDeleteDialog(BuildContext context, BloodPressureViewModel viewModel,
+      BloodPressure bloodPressure) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Silme İşlemi'),
-        content: const Text('Bu kan basıncı kaydını silmek istediğinizden emin misiniz?'),
+        content: const Text(
+            'Bu kan basıncı kaydını silmek istediğinizden emin misiniz?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

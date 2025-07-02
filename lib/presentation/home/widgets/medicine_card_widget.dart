@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/data/models/medicine/medicine_model.dart';
 import 'package:medicine_notification_app/presentation/home/home_view_model.dart';
 import 'package:medicine_notification_app/presentation/home/utils/delete_confirm_dialog.dart';
@@ -21,12 +22,10 @@ class MedicineCardWidget extends StatelessWidget {
       child: Card(
         child: InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UpdateScreenView(
-                      id: medicine.id?.toInt() ?? 0, medicine: medicine),
-                ));
+            context.fadeToPage(
+              UpdateScreenView(
+                  id: medicine.id?.toInt() ?? 0, medicine: medicine),
+            );
           },
           borderRadius: BorderRadius.circular(16.0),
           child: Padding(
@@ -106,7 +105,9 @@ class MedicineCardWidget extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             FlutterLocalNotificationService().showNotification(
-                title: medicine.name, body: medicine.notificationText,);
+              title: medicine.name,
+              body: medicine.notificationText,
+            );
             debugPrint("------------------------------------------" +
                 medicine.id.toString());
           },

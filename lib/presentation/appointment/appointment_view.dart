@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/common_page_transition.dart';
+import 'package:medicine_notification_app/common/widgets/common_list_tile.dart';
 import 'package:medicine_notification_app/presentation/appointment/appointment_view_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/adding_appointment.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
@@ -17,11 +19,8 @@ class AppointmentView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddingAppointment(),
-                ),
+              context.fadeToPage(
+                const AddingAppointment(),
               );
             },
           ),
@@ -42,21 +41,16 @@ class AppointmentView extends StatelessWidget {
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final appointment = appointments[index];
-                return GestureDetector(
+                return CommonListTile(
+                  leadingIcon: Icons.calendar_today,
+                  trailingIcon: Icons.arrow_forward_ios,
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AppointmentDetail(
-                          appointment: appointment,
-                        ),
-                      ),
+                    context.fadeToPage(
+                      AppointmentDetail(appointment: appointment),
                     );
                   },
-                  child: ListTile(
-                    title: Text(appointment.hospitalName.toString()),
-                    subtitle: Text(appointment.appointmentDate.toString()),
-                  ),
+                  title: appointment.hospitalName.toString(),
+                  subtitle: appointment.appointmentDate.toString(),
                 );
               },
             );
