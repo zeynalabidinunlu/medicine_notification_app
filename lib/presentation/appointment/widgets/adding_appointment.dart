@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
-import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
-import 'package:medicine_notification_app/common/detail/save/detail_save_button.dart';
+import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/detail/detail_form_card.dart';
+import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/detail_save_button.dart';
+import 'package:medicine_notification_app/common/show_error_snack_bar.dart';
+import 'package:medicine_notification_app/common/show_success_snack_bar.dart';
 import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
-import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/common/widgets/doctor_dropdown.dart';
 import 'package:medicine_notification_app/common/widgets/time_picker_field.dart';
@@ -63,7 +66,7 @@ class _AddingAppointmentState extends State<AddingAppointment> {
         isLoadingDoctors = false;
       });
       // Handle error - show snackbar or dialog
-      _showErrorSnackBar('Doktorlar yüklenirken hata oluştu: $e');
+      showErrorSnackBar(context,'Doktorlar yüklenirken hata oluştu: $e');
     }
   }
 
@@ -81,7 +84,7 @@ class _AddingAppointmentState extends State<AddingAppointment> {
     if (_formKey.currentState!.validate()) {
       // Check if doctor is selected
       if (selectedDoctor == null) {
-        _showErrorSnackBar('Lütfen bir doktor seçin!');
+        showErrorSnackBar(context,'Önce doktoru kaydetmelisiniz!');
         return;
       }
 
@@ -119,51 +122,18 @@ class _AddingAppointmentState extends State<AddingAppointment> {
         await vm.saveAppointment(appointment);
 
         // Show success message
-        _showSuccessSnackBar('Randevu başarıyla kaydedildi!');
+        showSuccessSnackBar(
+            context, 'Randevu başarılı bir şekilde kaydedildi !');
 
         Navigator.of(context).pop();
       } catch (e) {
-        _showErrorSnackBar('Randevu kaydedilirken hata oluştu: $e');
+        showErrorSnackBar(context, 'Randevu kaydedilirken hata oluştu: $e');
       } finally {
         setState(() {
           isSaving = false;
         });
       }
     }
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white),
-            const SizedBox(width: 8),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_outline, color: Colors.white),
-            const SizedBox(width: 8),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
   }
 
   // Helper method to parse date and time
@@ -233,13 +203,13 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                   child: Column(
                     children: [
                       // Hospital Information Card
-                      _buildFormCard(
-                        theme,
+                      DetailFormCard(
+                        theme: theme,
                         title: 'Hastane Bilgileri',
                         icon: Icons.local_hospital,
                         children: [
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _hospitalNameController,
                             labelText: 'Hastane Adı',
                             icon: Icons.business,
@@ -247,12 +217,12 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                               if (value == null || value.isEmpty) {
                                 return 'Lütfen hastane adını girin';
                               }
-                              return null;
+                              return 'Beklenmeyen Bir Hata Oluştu';
                             },
                           ),
                           const SizedBox(height: 16),
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _clinicNameController,
                             labelText: 'Klinik Adı',
                             icon: Icons.medical_services,
@@ -262,9 +232,9 @@ class _AddingAppointmentState extends State<AddingAppointment> {
 
                       const SizedBox(height: 16),
 
-                      // Appointment Details Card
-                      _buildFormCard(
-                        theme,
+                      // Randevu detayları
+                      DetailFormCard(
+                        theme: theme,
                         title: 'Randevu Detayları',
                         icon: Icons.calendar_today,
                         children: [
@@ -279,13 +249,13 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                       const SizedBox(height: 16),
 
                       // Notes Card
-                      _buildFormCard(
-                        theme,
+                      DetailFormCard(
+                        theme: theme,
                         title: 'Notlar',
                         icon: Icons.note_alt,
                         children: [
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _notesController,
                             labelText: 'Randevu Notları',
                             icon: Icons.edit_note,
@@ -314,94 +284,6 @@ class _AddingAppointmentState extends State<AddingAppointment> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildFormCard(
-    ThemeData theme, {
-    required String title,
-    required IconData icon,
-    required List<Widget> children,
-  }) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 18,
-                    color: theme.primaryColor,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCustomTextFormField(
-    ThemeData theme, {
-    required TextEditingController controller,
-    required String labelText,
-    required IconData icon,
-    String? Function(String?)? validator,
-    int maxLines = 1,
-    bool isOptional = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: Icon(icon, color: theme.primaryColor),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.outline),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.primaryColor, width: 2),
-        ),
-        filled: true,
-        fillColor: theme.colorScheme.surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
@@ -459,6 +341,4 @@ class _AddingAppointmentState extends State<AddingAppointment> {
       ),
     );
   }
-
-
 }

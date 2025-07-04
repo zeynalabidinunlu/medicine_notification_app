@@ -1,8 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
-import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/appointment/appointment_model.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +14,6 @@ class AppointmentDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
 
     // Check if appointment data is available
     if (appointment == null) {
@@ -230,6 +229,7 @@ class AppointmentDetail extends StatelessWidget {
     );
   }
 
+  // ignore: unused_element
   Widget _buildActionButtons(ThemeData theme) {
     return Row(
       children: [

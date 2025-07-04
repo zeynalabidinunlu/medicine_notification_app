@@ -1,10 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
-import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
-import 'package:medicine_notification_app/common/detail/save/detail_save_button.dart';
-import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_custom_text_form_field.dart';
+import 'package:medicine_notification_app/common/detail/detail_form_card.dart';
+import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/detail_save_button.dart';
+import 'package:medicine_notification_app/common/show_error_snack_bar.dart';
+import 'package:medicine_notification_app/common/show_success_snack_bar.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/data/models/blood_pressure/blood_pressure_model.dart';
 import 'package:medicine_notification_app/presentation/blood_pressure/blood_pressure_view_model.dart';
@@ -64,14 +67,14 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
         debugPrint("UI: ViewModel'e başarıyla eklendi");
 
         // Show success message
-        _showSuccessSnackBar('Kan basıncı başarıyla eklendi!');
+        showSuccessSnackBar(context, 'Kan basıncı başarıyla eklendi!');
 
         Navigator.of(context).pop();
       } catch (e) {
         debugPrint("UI: Hata oluştu: $e");
         debugPrint("UI: Hata tipi: ${e.runtimeType}");
 
-        _showErrorSnackBar('Kan basıncı kaydedilirken hata oluştu: $e');
+        showErrorSnackBar(context, 'Kan basıncı kaydedilirken hata oluştu: $e');
       } finally {
         setState(() {
           isSaving = false;
@@ -82,44 +85,9 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
     }
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white),
-            const SizedBox(width: 8),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_outline, color: Colors.white),
-            const SizedBox(width: 8),
-            Expanded(child: Text(message)),
-          ],
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       appBar: DetailAppBar(title: 'Kan Basıncı Ekle', theme: theme),
@@ -149,13 +117,13 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                   child: Column(
                     children: [
                       // Blood Pressure Measurements Card
-                      _buildFormCard(
-                        theme,
+                      DetailFormCard(
+                        theme: theme,
                         title: 'Kan Basıncı Ölçümleri',
                         icon: Icons.favorite,
                         children: [
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _systolicController,
                             labelText: 'Sistolik (Büyük Tansiyon)',
                             icon: Icons.arrow_upward,
@@ -164,12 +132,12 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                               if (value == null || value.isEmpty) {
                                 return 'Sistolik değeri boş bırakılamaz';
                               }
-                              return null;
+                              return 'Beklenmeyen Bir Hata Oluştu !!';
                             },
                           ),
                           const SizedBox(height: 16),
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _diastolicController,
                             labelText: 'Diastolik (Küçük Tansiyon)',
                             icon: Icons.arrow_downward,
@@ -178,12 +146,12 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                               if (value == null || value.isEmpty) {
                                 return 'Diastolik değeri boş bırakılamaz';
                               }
-                              return null;
+                              return 'Beklenmeyen Bir Hata Oluştu';
                             },
                           ),
                           const SizedBox(height: 16),
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _pulseController,
                             labelText: 'Nabız',
                             icon: Icons.monitor_heart,
@@ -192,7 +160,7 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                               if (value == null || value.isEmpty) {
                                 return 'Nabız değeri boş bırakılamaz';
                               }
-                              return null;
+                              return 'Beklenmeyen Bir Hata Oluştu';
                             },
                           ),
                         ],
@@ -201,8 +169,8 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                       const SizedBox(height: 16),
 
                       // Measurement Details Card
-                      _buildFormCard(
-                        theme,
+                      DetailFormCard(
+                        theme: theme,
                         title: 'Ölçüm Detayları',
                         icon: Icons.event_note,
                         children: [
@@ -217,8 +185,8 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                             },
                           ),
                           const SizedBox(height: 16),
-                          _buildCustomTextFormField(
-                            theme,
+                          DetailCustomTextFormField(
+                            theme: theme,
                             controller: _notesController,
                             labelText: 'Notlar',
                             icon: Icons.note_add,
@@ -248,95 +216,4 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
       ),
     );
   }
-
-  Widget _buildFormCard(
-    ThemeData theme, {
-    required String title,
-    required IconData icon,
-    required List<Widget> children,
-  }) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 18,
-                    color: theme.primaryColor,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCustomTextFormField(
-    ThemeData theme, {
-    required TextEditingController controller,
-    required String labelText,
-    required IconData icon,
-    String? Function(String?)? validator,
-    int maxLines = 1,
-    bool isOptional = false,
-    TextInputType? keyboardType,
-  }) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      validator: validator,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: Icon(icon, color: theme.primaryColor),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.outline),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.primaryColor, width: 2),
-        ),
-        filled: true,
-        fillColor: theme.colorScheme.surface,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-    );
-  }
-
 }

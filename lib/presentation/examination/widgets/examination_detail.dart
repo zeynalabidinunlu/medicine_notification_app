@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
-import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/examination/examination_model.dart';
 
 class ExaminationDetail extends StatelessWidget {
@@ -14,7 +14,6 @@ class ExaminationDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
 
     // Check if examination data is available
     if (examination == null) {
@@ -265,6 +264,7 @@ class ExaminationDetail extends StatelessWidget {
     }
   }
 
+  // ignore: unused_element
   Widget _buildActionButtons(ThemeData theme) {
     return Row(
       children: [

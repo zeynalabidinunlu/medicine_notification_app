@@ -147,8 +147,7 @@ const _DoctordaysOffValueEnumMap = {
   r'CARSAMBA': Days.CARSAMBA,
   r'PERSEMBE': Days.PERSEMBE,
   r'CUMA': Days.CUMA,
-  r'CUMARTESI': Days.CUMARTESI,
-  r'PAZAR': Days.PAZAR,
+ 
 };
 
 Id _doctorGetId(Doctor object) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/show_error_snack_bar.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/repository/doctors/doctors_repository.dart';
 import 'package:provider/provider.dart';
@@ -42,14 +43,8 @@ class _DoctorDropdownState extends State<DoctorDropdown> {
       setState(() {
         isLoading = false;
       });
-      _showError('Doktorlar yüklenirken hata oluştu: $e');
+      showErrorSnackBar(context,'Doktorlar yüklenirken hata oluştu: $e');
     }
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
   }
 
   @override
