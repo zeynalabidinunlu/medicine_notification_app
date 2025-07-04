@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/examination/examination_model.dart';
 
 class ExaminationDetail extends StatelessWidget {
@@ -18,7 +20,7 @@ class ExaminationDetail extends StatelessWidget {
     if (examination == null) {
       return Scaffold(
         backgroundColor: theme.colorScheme.background,
-        appBar: _buildAppBar(theme, 'Muayene Detayları'),
+        appBar: DetailAppBar(title: 'Muayene Detayları', theme: theme),
         body: _buildEmptyState(theme),
       );
     }
@@ -34,14 +36,23 @@ class ExaminationDetail extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(theme, 'Muayene Detayları'),
+      appBar: DetailAppBar(title: 'Muayene Detayları', theme: theme),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             // Header Section
-            _buildHeaderSection(theme, isDarkMode),
-            
+           DetailHeaderSection(
+              theme: theme,
+              title: 'Muayene Detayları',
+              subtitle: 'Muayene bilgilerinizi aşağıda görebilirsiniz',
+              icon: Icon(
+                Icons.medical_information,
+                size: 30,
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
+
             // Content Section
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -55,7 +66,7 @@ class ExaminationDetail extends StatelessWidget {
                     isExpandable: true,
                   ),
                   const SizedBox(height: 12),
-                  
+
                   _buildDetailCard(
                     theme,
                     title: 'Muayene Tarihi',
@@ -64,7 +75,7 @@ class ExaminationDetail extends StatelessWidget {
                     isHighlighted: true,
                   ),
                   const SizedBox(height: 12),
-                  
+
                   _buildDetailCard(
                     theme,
                     title: 'Tedavi Süreci',
@@ -73,19 +84,19 @@ class ExaminationDetail extends StatelessWidget {
                     isExpandable: true,
                   ),
                   const SizedBox(height: 12),
-                  
+
                   _buildDetailCard(
                     theme,
                     title: 'Sonraki Kontrol Zamanı',
                     value: nextControlTime,
                     icon: Icons.schedule,
                     isHighlighted: nextControlTime != 'Belirtilmemiş',
-                    cardColor: nextControlTime != 'Belirtilmemiş' 
+                    cardColor: nextControlTime != 'Belirtilmemiş'
                         ? Colors.orange.withOpacity(0.1)
                         : null,
                   ),
                   const SizedBox(height: 12),
-                  
+
                   _buildDetailCard(
                     theme,
                     title: 'Muayene Notları',
@@ -93,7 +104,7 @@ class ExaminationDetail extends StatelessWidget {
                     icon: Icons.note_alt,
                     isExpandable: true,
                   ),
-                  
+
                   if (examination!.appointmentTypes != null) ...[
                     const SizedBox(height: 12),
                     _buildDetailCard(
@@ -103,9 +114,9 @@ class ExaminationDetail extends StatelessWidget {
                       icon: Icons.category,
                     ),
                   ],
-                  
+
                   const SizedBox(height: 24),
-               //   _buildActionButtons(theme),
+                  //   _buildActionButtons(theme),
                 ],
               ),
             ),
@@ -115,22 +126,7 @@ class ExaminationDetail extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(ThemeData theme, String title) {
-    return AppBar(
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      backgroundColor: theme.primaryColor,
-      foregroundColor: theme.colorScheme.onPrimary,
-      elevation: 0,
-      centerTitle: true,
-    );
-  }
-
+  
   Widget _buildEmptyState(ThemeData theme) {
     return Center(
       child: Column(
@@ -169,61 +165,6 @@ class ExaminationDetail extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderSection(ThemeData theme, bool isDarkMode) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(
-                Icons.medical_information,
-                size: 30,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Muayene Detayları',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Muayene bilgilerinizi aşağıda görebilirsiniz',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withOpacity(0.8),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildDetailCard(
     ThemeData theme, {
     required String title,
@@ -236,12 +177,12 @@ class ExaminationDetail extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cardColor ?? 
-            (isHighlighted 
+        color: cardColor ??
+            (isHighlighted
                 ? theme.primaryColor.withOpacity(0.05)
                 : theme.colorScheme.surface),
         borderRadius: BorderRadius.circular(16),
-        border: isHighlighted 
+        border: isHighlighted
             ? Border.all(color: theme.primaryColor.withOpacity(0.3))
             : null,
         boxShadow: [
@@ -263,7 +204,8 @@ class ExaminationDetail extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: _getIconColor(icon, theme, isHighlighted).withOpacity(0.1),
+                    color: _getIconColor(icon, theme, isHighlighted)
+                        .withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
@@ -278,8 +220,8 @@ class ExaminationDetail extends StatelessWidget {
                     title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isHighlighted 
-                          ? theme.primaryColor 
+                      color: isHighlighted
+                          ? theme.primaryColor
                           : theme.colorScheme.onSurface,
                     ),
                   ),
@@ -304,7 +246,7 @@ class ExaminationDetail extends StatelessWidget {
 
   Color _getIconColor(IconData icon, ThemeData theme, bool isHighlighted) {
     if (isHighlighted) return theme.primaryColor;
-    
+
     switch (icon) {
       case Icons.record_voice_over:
         return Colors.blue;

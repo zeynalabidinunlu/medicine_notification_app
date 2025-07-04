@@ -1,7 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:medicine_notification_app/common/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/appointment/appointment_model.dart';
 import 'package:intl/intl.dart';
 
@@ -35,14 +36,22 @@ class AppointmentDetail extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: DetailAppBar(title: "Randevu Detayları", theme: theme),
+      appBar: DetailAppBar(title: "Randevu Bilgileri", theme: theme),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             // Header Section
-            _buildHeaderSection(theme, isDarkMode),
-
+            DetailHeaderSection(
+              title: 'Randevu Detayları',
+              subtitle: 'Randevu bilgilerinizi aşağıda görebilirsiniz',
+              theme: theme,
+              icon: Icon(
+                Icons.medical_services,
+                size: 40,
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
             // Content Section
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -102,7 +111,6 @@ class AppointmentDetail extends StatelessWidget {
     );
   }
 
-
   Widget _buildEmptyState(ThemeData theme) {
     return Center(
       child: Column(
@@ -137,61 +145,6 @@ class AppointmentDetail extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildHeaderSection(ThemeData theme, bool isDarkMode) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(
-                Icons.medical_services,
-                size: 30,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Randevu Detayları',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Randevu bilgilerinizi aşağıda görebilirsiniz',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withOpacity(0.8),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

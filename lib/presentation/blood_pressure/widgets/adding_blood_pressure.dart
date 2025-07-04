@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/save/detail_save_button.dart';
 import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/data/models/blood_pressure/blood_pressure_model.dart';
@@ -116,15 +119,24 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(theme),
+      appBar: DetailAppBar(title: 'Kan Basıncı Ekle', theme: theme),
       body: Column(
         children: [
           // Header Section
-          _buildHeaderSection(theme, isDarkMode),
+          DetailHeaderSection(
+            title: 'Kan Basıncı Ölçümü',
+            subtitle:
+                'Kan basıncı ölçüm değerlerinizi aşağıdaki formu doldurarak ekleyin',
+            theme: theme,
+            icon: Icon(
+              Icons.favorite_border,
+              size: 40,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
 
           // Form Section
           Expanded(
@@ -219,8 +231,12 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
                       const SizedBox(height: 32),
 
                       // Save Button
-                      _buildSaveButton(theme),
-
+                      DetailSaveButton(
+                          onPressed: _saveBloodPressure,
+                          loadingText: 'Kaydediliyor ...',
+                          savedText: 'Kan Basıncını Kaydet',
+                          theme: theme,
+                          isSaving: isSaving),
                       const SizedBox(height: 16),
                     ],
                   ),
@@ -229,78 +245,6 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return AppBar(
-      title: Text(
-        'Kan Basıncı Ekle',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      backgroundColor: theme.primaryColor,
-      foregroundColor: theme.colorScheme.onPrimary,
-      elevation: 0,
-      centerTitle: true,
-    );
-  }
-
-  Widget _buildHeaderSection(ThemeData theme, bool isDarkMode) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(
-                Icons.favorite_border,
-                size: 30,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Kan Basıncı Ölçümü',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Kan basıncı ölçüm değerlerinizi aşağıdaki formu doldurarak ekleyin',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withOpacity(0.8),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -395,53 +339,4 @@ class _AddingBloodPressureState extends State<AddingBloodPressure> {
     );
   }
 
-  Widget _buildSaveButton(ThemeData theme) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: isSaving ? null : _saveBloodPressure,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.primaryColor,
-          foregroundColor: theme.colorScheme.onPrimary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 2,
-        ),
-        child: isSaving
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Kaydediliyor...'),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.save, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Kan Basıncını Kaydet',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-      ),
-    );
-  }
 }

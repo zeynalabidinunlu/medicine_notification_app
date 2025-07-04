@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/save/detail_save_button.dart';
 import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
@@ -17,7 +20,7 @@ class AddingDoctors extends StatefulWidget {
 class _AddingDoctorsState extends State<AddingDoctors> {
   final _formKey = GlobalKey<FormState>();
   Days? _selectedDayOff;
-  
+
   // Controllers
   final TextEditingController _doctorNameController = TextEditingController();
   final TextEditingController _clinicNameController = TextEditingController();
@@ -51,7 +54,7 @@ class _AddingDoctorsState extends State<AddingDoctors> {
 
         // Show success message
         _showSuccessSnackBar('Doktor başarıyla kaydedildi!');
-        
+
         Navigator.of(context).pop();
       } catch (e) {
         _showErrorSnackBar('Doktor kaydedilirken hata oluştu: $e');
@@ -104,12 +107,20 @@ class _AddingDoctorsState extends State<AddingDoctors> {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(theme),
+      appBar: DetailAppBar(title: "Doktor Ekle", theme: theme),
       body: Column(
         children: [
           // Header Section
-          _buildHeaderSection(theme, isDarkMode),
-          
+          DetailHeaderSection(
+            title: 'Yeni Doktor',
+            subtitle: 'Doktor bilgilerini aşağıdaki formu doldurarak ekleyin',
+            theme: theme,
+            icon: Icon(
+              Icons.person_add_alt_1_outlined,
+              size: 40,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
           // Form Section
           Expanded(
             child: SingleChildScrollView(
@@ -140,9 +151,9 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Workplace Information Card
                       _buildFormCard(
                         theme,
@@ -176,9 +187,9 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Schedule Information Card
                       _buildFormCard(
                         theme,
@@ -188,12 +199,16 @@ class _AddingDoctorsState extends State<AddingDoctors> {
                           _buildDayOffDropdown(theme),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Save Button
-                      _buildSaveButton(theme),
-                      
+                      DetailSaveButton(
+                          onPressed: _saveDoctor,
+                          loadingText: 'Kaydediliyor ...',
+                          savedText: 'Doktoru Kaydet',
+                          theme: theme,
+                          isSaving: isSaving),
                       const SizedBox(height: 16),
                     ],
                   ),
@@ -202,78 +217,6 @@ class _AddingDoctorsState extends State<AddingDoctors> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return AppBar(
-      title: Text(
-        'Doktor Ekle',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      backgroundColor: theme.primaryColor,
-      foregroundColor: theme.colorScheme.onPrimary,
-      elevation: 0,
-      centerTitle: true,
-    );
-  }
-
-  Widget _buildHeaderSection(ThemeData theme, bool isDarkMode) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(
-                Icons.person_add_alt_1_outlined,
-                size: 30,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Yeni Doktor',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Doktor bilgilerini aşağıdaki formu doldurarak ekleyin',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withOpacity(0.8),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -361,7 +304,8 @@ class _AddingDoctorsState extends State<AddingDoctors> {
         ),
         filled: true,
         fillColor: theme.colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
@@ -383,7 +327,8 @@ class _AddingDoctorsState extends State<AddingDoctors> {
           ),
           filled: true,
           fillColor: theme.colorScheme.surface,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         items: Days.values.map((Days day) {
           return DropdownMenuItem<Days>(
@@ -409,53 +354,4 @@ class _AddingDoctorsState extends State<AddingDoctors> {
     );
   }
 
-  Widget _buildSaveButton(ThemeData theme) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: isSaving ? null : _saveDoctor,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.primaryColor,
-          foregroundColor: theme.colorScheme.onPrimary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 2,
-        ),
-        child: isSaving
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Kaydediliyor...'),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.save, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Doktoru Kaydet',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-      ),
-    );
-  }
 }

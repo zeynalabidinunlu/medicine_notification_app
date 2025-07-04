@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/header/detail_header_section.dart';
+import 'package:medicine_notification_app/common/detail/save/detail_save_button.dart';
 import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
 import 'package:medicine_notification_app/common/widgets/custom_text_form_field.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
@@ -23,11 +26,13 @@ class AddingAppointment extends StatefulWidget {
 class _AddingAppointmentState extends State<AddingAppointment> {
   final _formKey = GlobalKey<FormState>();
   AppointmentTypes? _selectedAppointmentType;
-  
+
   // Controllers
   final TextEditingController _hospitalNameController = TextEditingController();
-  final TextEditingController _appointmentDateController = TextEditingController();
-  final TextEditingController _appointmentTimeController = TextEditingController();
+  final TextEditingController _appointmentDateController =
+      TextEditingController();
+  final TextEditingController _appointmentTimeController =
+      TextEditingController();
   final TextEditingController _clinicNameController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
 
@@ -46,7 +51,8 @@ class _AddingAppointmentState extends State<AddingAppointment> {
   // Load doctors from repository
   Future<void> _loadDoctors() async {
     try {
-      final doctorsRepository = Provider.of<DoctorsRepository>(context, listen: false);
+      final doctorsRepository =
+          Provider.of<DoctorsRepository>(context, listen: false);
       final doctorsList = await doctorsRepository.getAllDoctors();
       setState(() {
         doctors = doctorsList;
@@ -91,7 +97,8 @@ class _AddingAppointmentState extends State<AddingAppointment> {
         final String timeString = _appointmentTimeController.text;
 
         // Convert time format if needed (HH:MM AM/PM to 24-hour format)
-        final DateTime appointmentDateTime = _parseDateTime(dateString, timeString);
+        final DateTime appointmentDateTime =
+            _parseDateTime(dateString, timeString);
 
         // Create appointment
         final appointment = Appointment()
@@ -113,7 +120,7 @@ class _AddingAppointmentState extends State<AddingAppointment> {
 
         // Show success message
         _showSuccessSnackBar('Randevu başarıyla kaydedildi!');
-        
+
         Navigator.of(context).pop();
       } catch (e) {
         _showErrorSnackBar('Randevu kaydedilirken hata oluştu: $e');
@@ -196,16 +203,25 @@ class _AddingAppointmentState extends State<AddingAppointment> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(theme),
+      appBar: DetailAppBar(title: 'Randevu Ekle', theme: theme),
       body: Column(
         children: [
           // Header Section
-          _buildHeaderSection(theme, isDarkMode),
-          
+          DetailHeaderSection(
+            title: 'Randevu Ekle',
+            subtitle:
+                'Randevu bilgilerinizi aşağıdaki formu doldurarak ekleyin',
+            theme: theme,
+            icon: Icon(
+              Icons.add_circle_outline,
+              size: 30,
+              color: theme.colorScheme.onPrimary,
+            ),
+          ),
+
           // Form Section
           Expanded(
             child: SingleChildScrollView(
@@ -243,9 +259,9 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Appointment Details Card
                       _buildFormCard(
                         theme,
@@ -259,9 +275,9 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                           _buildDoctorDropdown(theme),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Notes Card
                       _buildFormCard(
                         theme,
@@ -278,12 +294,18 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Save Button
-                      _buildSaveButton(theme),
-                      
+                      DetailSaveButton(
+                        loadingText: 'Kaydediliyor ..',
+                        savedText: 'Randevuyu Kaydet',
+                        theme: theme,
+                        isSaving: isSaving,
+                        onPressed: _saveAppointment,
+                      ),
+
                       const SizedBox(height: 16),
                     ],
                   ),
@@ -292,78 +314,6 @@ class _AddingAppointmentState extends State<AddingAppointment> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return AppBar(
-      title: Text(
-        'Randevu Ekle',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      backgroundColor: theme.primaryColor,
-      foregroundColor: theme.colorScheme.onPrimary,
-      elevation: 0,
-      centerTitle: true,
-    );
-  }
-
-  Widget _buildHeaderSection(ThemeData theme, bool isDarkMode) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(
-                Icons.add_circle_outline,
-                size: 30,
-                color: theme.colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Yeni Randevu',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Randevu bilgilerinizi aşağıdaki formu doldurarak ekleyin',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withOpacity(0.8),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -450,7 +400,8 @@ class _AddingAppointmentState extends State<AddingAppointment> {
         ),
         filled: true,
         fillColor: theme.colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
@@ -509,53 +460,5 @@ class _AddingAppointmentState extends State<AddingAppointment> {
     );
   }
 
-  Widget _buildSaveButton(ThemeData theme) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: isSaving ? null : _saveAppointment,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.primaryColor,
-          foregroundColor: theme.colorScheme.onPrimary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 2,
-        ),
-        child: isSaving
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Kaydediliyor...'),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.save, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Randevuyu Kaydet',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-      ),
-    );
-  }
+
 }

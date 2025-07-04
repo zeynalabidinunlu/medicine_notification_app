@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:medicine_notification_app/common/detail/appbar/detail_app_bar.dart';
 import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
@@ -21,7 +22,7 @@ class DoctorDetailView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
-      appBar: _buildAppBar(theme),
+      appBar: DetailAppBar(title: "Doktor Detayları", theme: theme),
       body: FutureBuilder<Doctor?>(
         future:
             context.read<DoctorsRepository>().getDoctorWithDetails(doctorId),
@@ -87,22 +88,6 @@ class DoctorDetailView extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return AppBar(
-      title: Text(
-        'Doktor Detayları',
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: theme.colorScheme.onPrimary,
-        ),
-      ),
-      backgroundColor: theme.primaryColor,
-      foregroundColor: theme.colorScheme.onPrimary,
-      elevation: 0,
-      centerTitle: true,
     );
   }
 
