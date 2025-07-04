@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:medicine_notification_app/common/common_page_transition.dart';
 import 'package:medicine_notification_app/common/widgets/common_list_tile.dart';
 import 'package:medicine_notification_app/presentation/examination/widgets/adding_examination.dart';
@@ -40,16 +41,17 @@ class ExaminationView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final examination = examinations[index];
                 return CommonListTile(
-                  onTap: () {
-                    context.fadeToPage(
-                      ExaminationDetail(examination: examination),
-                    );
-                  },
-                  leadingIcon: Icons.medical_services,
-                  trailingIcon: Icons.arrow_forward_ios,
-                  title: examination.patientComplaint.toString(),
-                  subtitle: examination.examinationDate.toString(),
-                );
+                    clinic: examination.patientComplaint ?? 'Bilinmiyor',
+                    onTap: () {
+                      context.fadeToPage(
+                        ExaminationDetail(examination: examination),
+                      );
+                    },
+                    leadingIcon: Icons.medical_services,
+                    trailingIcon: Icons.arrow_forward_ios,
+                    title: examination.patientComplaint.toString(),
+                    subtitle: DateFormat('HH:mm')
+                        .format(examination.examinationDate ?? DateTime.now()));
               },
             );
           }

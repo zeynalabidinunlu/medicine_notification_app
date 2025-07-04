@@ -5,6 +5,7 @@ import 'package:medicine_notification_app/presentation/appointment/appointment_v
 import 'package:medicine_notification_app/presentation/appointment/widgets/adding_appointment.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentView extends StatelessWidget {
   const AppointmentView({super.key});
@@ -42,16 +43,18 @@ class AppointmentView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final appointment = appointments[index];
                 return CommonListTile(
-                  leadingIcon: Icons.calendar_today,
-                  trailingIcon: Icons.arrow_forward_ios,
-                  onTap: () {
-                    context.fadeToPage(
-                      AppointmentDetail(appointment: appointment),
-                    );
-                  },
-                  title: appointment.hospitalName.toString(),
-                  subtitle: appointment.appointmentDate.toString(),
-                );
+                    clinic: appointment.clinic ?? 'Bilinmiyor',
+                    doctorName: appointment.doctor.value?.name ?? 'Bilinmiyor',
+                    leadingIcon: Icons.calendar_today,
+                    trailingIcon: Icons.arrow_forward_ios,
+                    onTap: () {
+                      context.fadeToPage(
+                        AppointmentDetail(appointment: appointment),
+                      );
+                    },
+                    title: appointment.hospitalName.toString(),
+                    subtitle: DateFormat('HH:mm')
+                        .format(appointment.appointmentDate ?? DateTime.now()));
               },
             );
           }

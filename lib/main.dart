@@ -13,6 +13,7 @@ import 'package:medicine_notification_app/repository/doctors/doctors_repository.
 import 'package:medicine_notification_app/repository/examination/examination_repository.dart';
 import 'package:medicine_notification_app/repository/medicine/medicine_repository.dart';
 import 'package:medicine_notification_app/service/notification/flutter_local_notification_service.dart';
+import 'package:medicine_notification_app/theme/material_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -73,42 +74,46 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final materialTheme = MaterialTheme(Theme.of(context).textTheme);
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: const Color(0xFF4CAF50), // A shade of green
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
-          ),
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: Color(0xFF4CAF50),
-          ),
-          // Default styling for elevated button for consistency
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4CAF50),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              textStyle: const TextStyle(fontSize: 18.0),
-            ),
-          ),
-          chipTheme: const ChipThemeData(
-              elevation: 20.0,
-              checkmarkColor: Colors.black,
-              selectedColor: Color(0xFFE8F5E0)),
-          cardTheme: CardThemeData(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            color: Colors.white,
-          ),
-          useMaterial3: true,
-        ),
+        theme: materialTheme.light(),
+        // theme: ThemeData(
+        //   primaryColor: const Color(0xFF4CAF50), // A shade of green
+        //   scaffoldBackgroundColor: Colors.white,
+        //   appBarTheme: const AppBarTheme(
+        //     backgroundColor: Colors.white,
+        //     foregroundColor: Colors.black,
+        //   ),
+        //   textSelectionTheme: const TextSelectionThemeData(
+        //     cursorColor: Color(0xFF4CAF50),
+        //   ),
+        //   // Default styling for elevated button for consistency
+        //   elevatedButtonTheme: ElevatedButtonThemeData(
+        //     style: ElevatedButton.styleFrom(
+        //       backgroundColor: const Color(0xFF4CAF50),
+        //       foregroundColor: Colors.white,
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(15.0),
+        //       ),
+        //       textStyle: const TextStyle(fontSize: 18.0),
+        //     ),
+        //   ),
+        //   chipTheme: const ChipThemeData(
+        //       elevation: 20.0,
+        //       checkmarkColor: Colors.black,
+        //       selectedColor: Color(0xFFE8F5E0)),
+        //   cardTheme: CardThemeData(
+        //     elevation: 2,
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(16.0),
+        //     ),
+        //     color: Colors.white,
+        //   ),
+        //   useMaterial3: true,
+        // ),
+        darkTheme: materialTheme.light(),
         home: const HomeView());
   }
 }

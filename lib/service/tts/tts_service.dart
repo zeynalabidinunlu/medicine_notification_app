@@ -12,7 +12,7 @@ class TTSService {
 
   Future<void> initialize() async {
     if (_isInitialized) return;
-
+    
     await _flutterTts.setLanguage("tr-TR");
     await _flutterTts.setSpeechRate(0.5);
     await _flutterTts.setVolume(1.0);
