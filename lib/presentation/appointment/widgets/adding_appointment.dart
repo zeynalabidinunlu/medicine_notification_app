@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_appointment_type_drop_down.dart';
 import 'package:medicine_notification_app/common/detail/detail_custom_text_form_field.dart';
 import 'package:medicine_notification_app/common/detail/detail_form_card.dart';
 import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/common/detail/detail_save_button.dart';
 import 'package:medicine_notification_app/common/show_error_snack_bar.dart';
 import 'package:medicine_notification_app/common/show_success_snack_bar.dart';
-import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/common/widgets/doctor_dropdown.dart';
 import 'package:medicine_notification_app/common/widgets/time_picker_field.dart';
@@ -66,7 +66,7 @@ class _AddingAppointmentState extends State<AddingAppointment> {
         isLoadingDoctors = false;
       });
       // Handle error - show snackbar or dialog
-      showErrorSnackBar(context,'Doktorlar yüklenirken hata oluştu: $e');
+      showErrorSnackBar(context, 'Doktorlar yüklenirken hata oluştu: $e');
     }
   }
 
@@ -84,7 +84,7 @@ class _AddingAppointmentState extends State<AddingAppointment> {
     if (_formKey.currentState!.validate()) {
       // Check if doctor is selected
       if (selectedDoctor == null) {
-        showErrorSnackBar(context,'Önce doktoru kaydetmelisiniz!');
+        showErrorSnackBar(context, 'Önce doktoru kaydetmelisiniz!');
         return;
       }
 
@@ -240,7 +240,14 @@ class _AddingAppointmentState extends State<AddingAppointment> {
                         children: [
                           _buildDateTimeRow(theme),
                           const SizedBox(height: 16),
-                          _buildAppointmentTypeDropdown(theme),
+                          DetailAppointmentTypeDropDown(
+                            selectedType: _selectedAppointmentType,
+                            onChanged: (type) {
+                              setState(() {
+                                _selectedAppointmentType = type;
+                              });
+                            },
+                          ),
                           const SizedBox(height: 16),
                           _buildDoctorDropdown(theme),
                         ],
@@ -308,21 +315,6 @@ class _AddingAppointmentState extends State<AddingAppointment> {
     );
   }
 
-  Widget _buildAppointmentTypeDropdown(ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: AppointmentTypeDropdown(
-        onChanged: (selectedType) {
-          setState(() {
-            _selectedAppointmentType = selectedType;
-          });
-        },
-      ),
-    );
-  }
 
   Widget _buildDoctorDropdown(ThemeData theme) {
     return Container(

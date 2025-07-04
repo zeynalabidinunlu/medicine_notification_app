@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_empty_state.dart';
 import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/appointment/appointment_model.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,11 @@ class AppointmentDetail extends StatelessWidget {
           title: "Randevu Detayları",
           theme: theme,
         ),
-        body: _buildEmptyState(theme),
+        body: DetailEmptyState(
+          theme: theme,
+          title: 'Randevu Detayı Bulunamadı',
+          subtitle: 'Bu randevu için detay bilgisi mevcut değil.',
+        ),
       );
     }
 
@@ -106,44 +111,6 @@ class AppointmentDetail extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(ThemeData theme) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Icon(
-              Icons.event_busy,
-              size: 40,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Randevu Detayı Bulunamadı',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onBackground,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Bu randevu için detay bilgisi mevcut değil.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onBackground.withOpacity(0.6),
-            ),
-          ),
-        ],
       ),
     );
   }

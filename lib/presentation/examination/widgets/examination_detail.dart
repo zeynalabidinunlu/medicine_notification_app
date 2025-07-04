@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_empty_state.dart';
 import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/data/models/examination/examination_model.dart';
 
@@ -20,7 +21,10 @@ class ExaminationDetail extends StatelessWidget {
       return Scaffold(
         backgroundColor: theme.colorScheme.background,
         appBar: DetailAppBar(title: 'Muayene Detayları', theme: theme),
-        body: _buildEmptyState(theme),
+        body: DetailEmptyState(
+            theme: theme,
+            title: 'Muayene Detayı Bulunamadı',
+            subtitle: 'Bu muayene için detay bilgisi mevcut değil.'),
       );
     }
 
@@ -41,7 +45,7 @@ class ExaminationDetail extends StatelessWidget {
         child: Column(
           children: [
             // Header Section
-           DetailHeaderSection(
+            DetailHeaderSection(
               theme: theme,
               title: 'Muayene Detayları',
               subtitle: 'Muayene bilgilerinizi aşağıda görebilirsiniz',
@@ -121,45 +125,6 @@ class ExaminationDetail extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  
-  Widget _buildEmptyState(ThemeData theme) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Icon(
-              Icons.medical_information_outlined,
-              size: 40,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Muayene Detayı Bulunamadı',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onBackground,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Bu muayene için detay bilgisi mevcut değil.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onBackground.withOpacity(0.6),
-            ),
-          ),
-        ],
       ),
     );
   }

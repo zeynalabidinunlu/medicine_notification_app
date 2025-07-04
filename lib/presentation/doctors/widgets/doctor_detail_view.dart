@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
 import 'package:medicine_notification_app/common/common_page_transition.dart';
+import 'package:medicine_notification_app/common/detail/detail_empty_state.dart';
 import 'package:medicine_notification_app/data/models/doctor/doctor_model.dart';
 import 'package:medicine_notification_app/presentation/appointment/widgets/appointment_detail.dart';
 import 'package:medicine_notification_app/presentation/examination/widgets/examination_detail.dart';
@@ -33,7 +34,11 @@ class DoctorDetailView extends StatelessWidget {
 
           final doctor = snapshot.data;
           if (doctor == null) {
-            return _buildEmptyState(theme);
+            return DetailEmptyState(
+              theme: theme,
+              title: 'Doktor Bulunamadı',
+              subtitle: 'Aradığınız doktor bulunamadı.',
+            );
           }
 
           return SingleChildScrollView(
@@ -110,45 +115,6 @@ class DoctorDetailView extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildEmptyState(ThemeData theme) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(40),
-            ),
-            child: Icon(
-              Icons.person_search,
-              size: 40,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Doktor Bulunamadı',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: theme.colorScheme.onBackground,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Aradığınız doktor bulunamadı.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onBackground.withOpacity(0.6),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildHeaderSection(ThemeData theme, Doctor doctor, bool isDarkMode) {
     return Container(
       width: double.infinity,

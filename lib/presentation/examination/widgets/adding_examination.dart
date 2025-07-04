@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:medicine_notification_app/common/detail/detail_app_bar.dart';
+import 'package:medicine_notification_app/common/detail/detail_appointment_type_drop_down.dart';
 import 'package:medicine_notification_app/common/detail/detail_custom_text_form_field.dart';
 import 'package:medicine_notification_app/common/detail/detail_form_card.dart';
 import 'package:medicine_notification_app/common/detail/detail_header_section.dart';
 import 'package:medicine_notification_app/common/detail/detail_save_button.dart';
 import 'package:medicine_notification_app/common/show_error_snack_bar.dart';
 import 'package:medicine_notification_app/common/show_success_snack_bar.dart';
-import 'package:medicine_notification_app/common/widgets/appointment_type_dropdown.dart';
 import 'package:medicine_notification_app/common/widgets/date_picker_field.dart';
 import 'package:medicine_notification_app/common/widgets/doctor_dropdown.dart';
 import 'package:medicine_notification_app/data/enum/enums.dart';
@@ -246,7 +246,14 @@ class _AddingExaminationState extends State<AddingExamination> {
                         children: [
                           _buildDateTimeRow(theme),
                           const SizedBox(height: 16),
-                          _buildAppointmentTypeDropdown(theme),
+                          DetailAppointmentTypeDropDown(
+                            selectedType: _selectedAppointmentType,
+                            onChanged: (type) {
+                              setState(() {
+                                _selectedAppointmentType = type;
+                              });
+                            },
+                          ),
                           const SizedBox(height: 16),
                           _buildDoctorDropdown(theme),
                         ],
@@ -298,22 +305,6 @@ class _AddingExaminationState extends State<AddingExamination> {
           },
         ),
       ],
-    );
-  }
-
-  Widget _buildAppointmentTypeDropdown(ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: AppointmentTypeDropdown(
-        onChanged: (selectedType) {
-          setState(() {
-            _selectedAppointmentType = selectedType;
-          });
-        },
-      ),
     );
   }
 
