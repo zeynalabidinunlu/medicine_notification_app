@@ -56,8 +56,8 @@ Mekanın Cennet olsun.
 ### Teknolojiler
 - **Flutter** - Cross-platform mobile development
 - **Provider** - State management
-- **SQLite** - Yerel veri saklama
-- **Local Notifications** - Bildirim sistemi
+- **İsar** - Yerel veri saklama
+- **Flutter Local Notifications** - Bildirim sistemi
 
 ## 🔒 Gizlilik
 
