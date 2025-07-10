@@ -98,7 +98,7 @@ Bu proje MIT Lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 👨‍💻 Geliştirici
 
-**[Adınız]**
+**Zeynal Abidin Ünlü**
 - Email: zaustudios@gmail.com
 - LinkedIn: [linkedin.com/in/zeynalabidinunlu](https://linkedin.com/in/zeynalabidinunlu)
 - GitHub: [@zeynalabidinunlu](https://github.com/zeynalabidinunlu)
