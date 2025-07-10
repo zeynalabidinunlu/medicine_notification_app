@@ -15,7 +15,7 @@ Günlük sağlık ihtiyaçlarınızı kolayca yönetmeniz için tasarlanmış, F
 
 ### 💊 İlaç Takibi
 - İlaçlarınızı kolayca ekleyebilir ve düzenleyebilirsiniz
-- Detaylı ilaç bilgilerini (doz, kullanım süresi, yan etkiler) görüntüleyebilirsiniz
+- Detaylı ilaç bilgilerini (doz, kullanım süresi) görüntüleyebilirsiniz
 - İlaç alma saatlerinde otomatik bildirim alırsınız
 - İlaç geçmişinizi ve düzenli kullanım durumunuzu takip edebilirsiniz
 
