@@ -67,8 +67,8 @@ Tüm verileriniz **sadece sizin cihazınızda saklanır**. Hiçbir kişisel sağ
 
 1. **Repository'yi klonlayın:**
 ```bash
-git clone https://github.com/yourusername/saglik-takibi.git
-cd saglik-takibi
+git clone https://github.com/zeynalabidinunlu/medicine_notification_app.git
+cd medicine_notification_app
 ```
 
 2. **Gerekli paketleri yükleyin:**
