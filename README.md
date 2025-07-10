@@ -1,6 +1,8 @@
 # 💊 Sağlık Takibi Uygulaması
 
 Günlük sağlık ihtiyaçlarınızı kolayca yönetmeniz için tasarlanmış, Flutter ile geliştirilmiş kapsamlı bir sağlık takibi uygulaması.
+Uygulama 2024 yılında hayatını kaybeden Babaannem Hanım Ünlü'ye adanmıştır.
+Mekanın Cennet olsun.
 
 ## 📱 Ekran Görüntüleri
 <div align="center">
