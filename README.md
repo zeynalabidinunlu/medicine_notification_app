@@ -67,8 +67,8 @@ Tüm verileriniz **sadece sizin cihazınızda saklanır**. Hiçbir kişisel sağ
 
 1. **Repository'yi klonlayın:**
 ```bash
-git clone https://github.com/zeynalabidinunlu/medicine_notification_app.git
-cd medicine_notification_app
+git clone https://github.com/zeynalabidinunlu/saglik_takip.git
+cd saglik_takip
 ```
 
 2. **Gerekli paketleri yükleyin:**
@@ -83,13 +83,13 @@ flutter run
 
 ### APK İndirme
 
-[Releases](https://github.com/zeynalabidinunlu/medicine_notification_app/releases) sayfasından en son sürümü indirebilirsiniz.
+[Releases](https://github.com/zeynalabidinunlu/saglik_takip/releases) sayfasından en son sürümü indirebilirsiniz.
 
 
 
 ## 🐛 Hata Bildirimi
 
-Hata bulduysanız veya öneriniz varsa, lütfen [Issues](https://github.com/zeynalabidinunlu/medicine_notification_app/issues) sayfasından bildirim yapın.
+Hata bulduysanız veya öneriniz varsa, lütfen [Issues](https://github.com/zeynalabidinunlu/saglik_takip/issues) sayfasından bildirim yapın.
 
 
 ## 📄 Lisans
@@ -110,7 +110,7 @@ Bu projeye katkıda bulunan herkese teşekkürler!
 ## 📱 İletişim
 
 Sorularınız için:
-- GitHub Issues: [Issues sayfası](https://github.com/zeynalabidinunlu/medicine_notification_app/issues)
+- GitHub Issues: [Issues sayfası](https://github.com/zeynalabidinunlu/saglik_takip/issues)
 - Email: zaustudios@gmail.com
 ---
 
